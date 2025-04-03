@@ -116,7 +116,7 @@ document.addEventListener('DOMContentLoaded', function() {
         updateTextContent('warnings-count', warnings);
         updateTextContent('failed-checks-count', failedChecks);
         
-        // Update score
+        // Update score in main section
         const scoreElement = document.getElementById('seo-score');
         const scoreCircle = document.getElementById('seo-score-circle');
         const scoreRating = document.getElementById('seo-score-rating');
@@ -142,6 +142,15 @@ document.addEventListener('DOMContentLoaded', function() {
                 if (scoreRating) scoreRating.textContent = 'Poor';
             }
         }
+        
+        // Update score in social media preview section
+        const scoreValueElement = document.getElementById('seo-score-value');
+        const scoreLabel = document.getElementById('seo-score-label');
+        const basicSeoScore = document.getElementById('basic-seo-score');
+        
+        if (scoreValueElement) scoreValueElement.textContent = score;
+        if (scoreLabel) scoreLabel.textContent = score >= 70 ? 'Good' : score >= 50 ? 'Average' : 'Poor';
+        if (basicSeoScore) basicSeoScore.textContent = score;
     }
     
     // Update Google Preview
@@ -150,6 +159,38 @@ document.addEventListener('DOMContentLoaded', function() {
         updateTextContent('google-title', data.title.content || 'No title');
         updateTextContent('google-url', data.url);
         updateTextContent('google-description', data.meta_description.content || 'No description available.');
+        
+        // Update heading counts
+        const h1Count = document.getElementById('h1-count');
+        const h2Count = document.getElementById('h2-count');
+        const h3Count = document.getElementById('h3-count');
+        
+        if (h1Count) h1Count.textContent = data.headings.h1.length || 0;
+        if (h2Count) h2Count.textContent = data.headings.h2.length || 0;
+        if (h3Count) h3Count.textContent = data.headings.h3.length || 0;
+        
+        // Update headings content
+        const h1Tags = document.getElementById('h1-tags');
+        const h2Tags = document.getElementById('h2-tags');
+        const h3Tags = document.getElementById('h3-tags');
+        
+        if (h1Tags) {
+            h1Tags.innerHTML = data.headings.h1.length > 0 
+                ? data.headings.h1.map(h => `<div class="tag-item">${h}</div>`).join('') 
+                : '<p class="text-muted small">No H1 headings found.</p>';
+        }
+        
+        if (h2Tags) {
+            h2Tags.innerHTML = data.headings.h2.length > 0 
+                ? data.headings.h2.map(h => `<div class="tag-item">${h}</div>`).join('') 
+                : '<p class="text-muted small">No H2 headings found.</p>';
+        }
+        
+        if (h3Tags) {
+            h3Tags.innerHTML = data.headings.h3.length > 0 
+                ? data.headings.h3.map(h => `<div class="tag-item">${h}</div>`).join('') 
+                : '<p class="text-muted small">No H3 headings found.</p>';
+        }
     }
     
     // Display SEO Checks
@@ -329,7 +370,7 @@ document.addEventListener('DOMContentLoaded', function() {
         
         table.innerHTML = '';
         
-        const commonTags = ['og:title', 'og:description', 'og:url', 'og:site_name', 'og:locale'];
+        const commonTags = ['og:title', 'og:description', 'og:url', 'og:site_name', 'og:locale', 'og:image'];
         
         commonTags.forEach(tag => {
             const row = document.createElement('tr');
@@ -400,70 +441,49 @@ document.addEventListener('DOMContentLoaded', function() {
                 if (recommendation.toLowerCase().includes('good') || 
                     recommendation.toLowerCase().includes('properly')) {
                     type = 'success';
-                } else if (recommendation.toLowerCase().includes('missing') || 
-                          recommendation.toLowerCase().includes('no ')) {
+                } else if (recommendation.toLowerCase().includes('critical') ||
+                          recommendation.toLowerCase().includes('error')) {
                     type = 'danger';
                 }
                 
-                // Get a title from the recommendation
-                let title = recommendation.split('.')[0];
-                if (title.length > 50) {
-                    title = title.substring(0, 47) + '...';
-                }
+                const alertClass = `alert-${type}`;
+                const iconClass = type === 'success' ? 'check-circle' : 
+                                 type === 'warning' ? 'exclamation-triangle' : 'times-circle';
                 
-                // Create recommendation item
-                const item = document.createElement('div');
-                item.className = `card mb-3 border-start border-${type} border-4`;
-                item.innerHTML = `
-                    <div class="card-body py-3">
-                        <h5 class="h6 mb-2">${title}</h5>
-                        <p class="mb-0 small">${recommendation}</p>
-                    </div>
+                const recItem = document.createElement('div');
+                recItem.className = `alert ${alertClass} d-flex align-items-center`;
+                recItem.innerHTML = `
+                    <i class="fas fa-${iconClass} me-2"></i>
+                    <div>${recommendation}</div>
                 `;
                 
-                container.appendChild(item);
+                container.appendChild(recItem);
             });
         } else {
-            container.innerHTML = `
-                <div class="card border-start border-success border-4">
-                    <div class="card-body py-3">
-                        <h5 class="h6 mb-2">Great SEO Implementation</h5>
-                        <p class="mb-0 small">No recommendations needed. Your site appears to be following SEO best practices.</p>
-                    </div>
-                </div>
-            `;
+            container.innerHTML = '<p class="text-muted">No recommendations available.</p>';
         }
     }
     
-    // Utility Functions
+    // Helper function to show an element
     function showElement(element) {
-        if (element) {
-            element.classList.remove('d-none');
-        }
+        if (element) element.classList.remove('d-none');
     }
     
+    // Helper function to hide an element
     function hideElement(element) {
-        if (element) {
-            element.classList.add('d-none');
-        }
+        if (element) element.classList.add('d-none');
     }
     
+    // Helper function to update text content
     function updateTextContent(elementId, content) {
         const element = document.getElementById(elementId);
-        if (element) {
-            element.textContent = content;
-        } else {
-            console.warn(`Element with id '${elementId}' not found`);
-        }
+        if (element) element.textContent = content;
     }
     
+    // Display error message
     function showError(message) {
-        if (errorMessage) {
-            errorMessage.textContent = message;
-            showElement(errorAlert);
-        } else {
-            console.error('Error message element not found');
-            alert(message); // Fallback to alert if element not found
-        }
+        if (errorMessage) errorMessage.textContent = message;
+        showElement(errorAlert);
+        hideElement(loadingIndicator);
     }
 });
