@@ -1,0 +1,249 @@
+/* Custom styles for SEO Meta Tag Analyzer */
+
+/* Status icons */
+.tag-status {
+    min-width: 24px;
+    text-align: center;
+}
+
+/* Tag content styling */
+.tag-content {
+    background-color: rgba(0, 0, 0, 0.1);
+    border-radius: .25rem;
+    padding: .75rem;
+    word-wrap: break-word;
+    font-family: monospace;
+}
+
+.tag-content:empty::before {
+    content: 'Not found';
+    color: #dc3545;
+    font-style: italic;
+}
+
+/* SEO Score styling */
+.score-circle {
+    width: 130px;
+    height: 130px;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin: 0 auto;
+    border: 10px solid #6c757d;
+    font-size: 2.5rem;
+    font-weight: bold;
+    transition: all 0.3s ease;
+}
+
+.score-excellent {
+    border-color: #28a745;
+    color: #28a745;
+}
+
+.score-good {
+    border-color: #17a2b8;
+    color: #17a2b8;
+}
+
+.score-average {
+    border-color: #ffc107;
+    color: #ffc107;
+}
+
+.score-poor {
+    border-color: #dc3545;
+    color: #dc3545;
+}
+
+/* Preview styling */
+.preview-container {
+    margin: 10px 0;
+}
+
+/* Google Preview */
+.google-preview-box {
+    background-color: rgba(0, 0, 0, 0.1);
+    border-radius: .375rem;
+    padding: 1rem;
+    font-family: Arial, sans-serif;
+    max-width: 600px;
+}
+
+.google-title {
+    color: #1a0dab;
+    font-size: 1.125rem;
+    line-height: 1.3;
+    margin-bottom: 0.25rem;
+    cursor: pointer;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    display: -webkit-box;
+    -webkit-line-clamp: 2;
+    -webkit-box-orient: vertical;
+}
+
+.google-url {
+    color: #006621;
+    font-size: 0.875rem;
+    line-height: 1.3;
+    margin-bottom: 0.5rem;
+}
+
+.google-description {
+    color: #545454;
+    font-size: 0.875rem;
+    line-height: 1.5;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    display: -webkit-box;
+    -webkit-line-clamp: 3;
+    -webkit-box-orient: vertical;
+}
+
+/* Facebook Preview */
+.facebook-preview-box {
+    background-color: rgba(0, 0, 0, 0.1);
+    border-radius: .375rem;
+    overflow: hidden;
+    font-family: Helvetica, Arial, sans-serif;
+    max-width: 500px;
+    border: 1px solid rgba(0, 0, 0, 0.125);
+}
+
+.facebook-image {
+    height: 260px;
+    background-color: #f0f2f5;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.no-image-placeholder {
+    text-align: center;
+    color: #6c757d;
+}
+
+.no-image-placeholder i {
+    font-size: 48px;
+    margin-bottom: 10px;
+}
+
+.facebook-content {
+    padding: 12px;
+    background-color: #f0f2f5;
+    border-top: 1px solid rgba(0, 0, 0, 0.125);
+}
+
+.facebook-domain {
+    color: #606770;
+    font-size: 0.75rem;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+    margin-bottom: 4px;
+}
+
+.facebook-title {
+    font-weight: 600;
+    font-size: 1rem;
+    line-height: 1.3;
+    margin-bottom: 5px;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    display: -webkit-box;
+    -webkit-line-clamp: 2;
+    -webkit-box-orient: vertical;
+}
+
+.facebook-description {
+    color: #606770;
+    font-size: 0.875rem;
+    line-height: 1.3;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    display: -webkit-box;
+    -webkit-line-clamp: 3;
+    -webkit-box-orient: vertical;
+}
+
+/* Twitter Preview */
+.twitter-preview-box {
+    background-color: rgba(0, 0, 0, 0.1);
+    border-radius: .375rem;
+    overflow: hidden;
+    font-family: -apple-system, BlinkMacSystemFont, Segoe UI, Roboto, Helvetica, Arial, sans-serif;
+    max-width: 500px;
+    border: 1px solid rgba(0, 0, 0, 0.125);
+}
+
+.twitter-image {
+    height: 250px;
+    background-color: #f8f9fa;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-direction: column;
+}
+
+.image-placeholder {
+    text-align: center;
+    color: #6c757d;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+.image-placeholder i, .no-image-placeholder i {
+    font-size: 48px;
+    margin-bottom: 10px;
+}
+
+.twitter-content {
+    padding: 12px;
+    background-color: #f8f9fa;
+    border-top: 1px solid rgba(0, 0, 0, 0.125);
+}
+
+.twitter-title {
+    font-weight: bold;
+    font-size: 1rem;
+    line-height: 1.3;
+    margin-bottom: 5px;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    display: -webkit-box;
+    -webkit-line-clamp: 2;
+    -webkit-box-orient: vertical;
+}
+
+.twitter-description {
+    color: #657786;
+    font-size: 0.875rem;
+    line-height: 1.3;
+    margin-bottom: 5px;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    display: -webkit-box;
+    -webkit-line-clamp: 3;
+    -webkit-box-orient: vertical;
+}
+
+.twitter-domain {
+    color: #657786;
+    font-size: 0.75rem;
+}
+
+/* Heading structure display */
+.heading-item {
+    padding: 6px 10px;
+    background-color: rgba(0, 0, 0, 0.1);
+    border-radius: 4px;
+    margin-bottom: 6px;
+    font-family: monospace;
+    word-break: break-word;
+}
+
+/* Recommendations list styling */
+.recommendations-list .list-group-item {
+    border-left: 4px solid #ffc107;
+}
