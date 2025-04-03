@@ -1,39 +1,33 @@
 /* Custom styles for SEO Meta Tag Analyzer */
 
-/* Status icons */
-.tag-status {
-    min-width: 24px;
-    text-align: center;
+/* Main styles */
+body {
+    line-height: 1.5;
 }
 
-/* Tag content styling */
-.tag-content {
-    background-color: rgba(0, 0, 0, 0.1);
-    border-radius: .25rem;
-    padding: .75rem;
-    word-wrap: break-word;
-    font-family: monospace;
-}
-
-.tag-content:empty::before {
-    content: 'Not found';
-    color: #dc3545;
-    font-style: italic;
-}
-
-/* SEO Score styling */
+/* Score circle styling */
 .score-circle {
-    width: 130px;
-    height: 130px;
+    width: 100px;
+    height: 100px;
     border-radius: 50%;
     display: flex;
     align-items: center;
     justify-content: center;
     margin: 0 auto;
-    border: 10px solid #6c757d;
-    font-size: 2.5rem;
+    border: 5px solid #6c757d;
+    font-size: 2rem;
     font-weight: bold;
-    transition: all 0.3s ease;
+    position: relative;
+}
+
+.score-circle:after {
+    content: '/100';
+    display: block;
+    position: absolute;
+    bottom: -1.5rem;
+    font-size: 0.875rem;
+    color: #6c757d;
+    font-weight: normal;
 }
 
 .score-excellent {
@@ -56,18 +50,13 @@
     color: #dc3545;
 }
 
-/* Preview styling */
-.preview-container {
-    margin: 10px 0;
-}
-
-/* Google Preview */
+/* Google Preview styling */
 .google-preview-box {
-    background-color: rgba(0, 0, 0, 0.1);
     border-radius: .375rem;
     padding: 1rem;
     font-family: Arial, sans-serif;
     max-width: 600px;
+    background-color: #f0f2f5;
 }
 
 .google-title {
@@ -103,7 +92,6 @@
 
 /* Facebook Preview */
 .facebook-preview-box {
-    background-color: rgba(0, 0, 0, 0.1);
     border-radius: .375rem;
     overflow: hidden;
     font-family: Helvetica, Arial, sans-serif;
@@ -117,14 +105,40 @@
     display: flex;
     align-items: center;
     justify-content: center;
+    overflow: hidden;
+    position: relative;
+}
+
+.facebook-image img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    object-position: center;
 }
 
 .no-image-placeholder {
     text-align: center;
     color: #6c757d;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    width: 100%;
+    height: 100%;
 }
 
-.no-image-placeholder i {
+.image-placeholder {
+    text-align: center;
+    color: #6c757d;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    width: 100%;
+    height: 100%;
+}
+
+.image-placeholder i, .no-image-placeholder i {
     font-size: 48px;
     margin-bottom: 10px;
 }
@@ -148,6 +162,7 @@
     font-size: 1rem;
     line-height: 1.3;
     margin-bottom: 5px;
+    color: #1c1e21;
     overflow: hidden;
     text-overflow: ellipsis;
     display: -webkit-box;
@@ -168,7 +183,6 @@
 
 /* Twitter Preview */
 .twitter-preview-box {
-    background-color: rgba(0, 0, 0, 0.1);
     border-radius: .375rem;
     overflow: hidden;
     font-family: -apple-system, BlinkMacSystemFont, Segoe UI, Roboto, Helvetica, Arial, sans-serif;
@@ -182,20 +196,15 @@
     display: flex;
     align-items: center;
     justify-content: center;
-    flex-direction: column;
+    overflow: hidden;
+    position: relative;
 }
 
-.image-placeholder {
-    text-align: center;
-    color: #6c757d;
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-}
-
-.image-placeholder i, .no-image-placeholder i {
-    font-size: 48px;
-    margin-bottom: 10px;
+.twitter-image img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    object-position: center;
 }
 
 .twitter-content {
@@ -209,6 +218,7 @@
     font-size: 1rem;
     line-height: 1.3;
     margin-bottom: 5px;
+    color: #14171a;
     overflow: hidden;
     text-overflow: ellipsis;
     display: -webkit-box;
@@ -233,17 +243,15 @@
     font-size: 0.75rem;
 }
 
-/* Heading structure display */
-.heading-item {
-    padding: 6px 10px;
-    background-color: rgba(0, 0, 0, 0.1);
-    border-radius: 4px;
-    margin-bottom: 6px;
-    font-family: monospace;
-    word-break: break-word;
+/* Recommendations section */
+.border-success-custom {
+    border-left: 4px solid #28a745;
 }
 
-/* Recommendations list styling */
-.recommendations-list .list-group-item {
+.border-warning-custom {
     border-left: 4px solid #ffc107;
+}
+
+.border-danger-custom {
+    border-left: 4px solid #dc3545;
 }

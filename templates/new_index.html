@@ -1,0 +1,383 @@
+<!DOCTYPE html>
+<html lang="en" data-bs-theme="dark">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>SEO Meta Tag Analyzer</title>
+    <meta name="description" content="Analyze and visualize SEO meta tags for any website - improve your search engine optimization with our interactive analyzer.">
+    
+    <!-- Bootstrap 5 (Replit Dark Theme) -->
+    <link rel="stylesheet" href="https://cdn.replit.com/agent/bootstrap-agent-dark-theme.min.css">
+    
+    <!-- Font Awesome -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    
+    <!-- Custom CSS -->
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/custom.css') }}">
+</head>
+<body>
+    <!-- Main Container -->
+    <div class="container py-4">
+        <!-- Header -->
+        <header class="mb-4">
+            <h1 class="mb-1">SEO Meta Tag Analyzer</h1>
+            <p class="text-muted">Analyze and visualize SEO tags to improve your website's optimization</p>
+        </header>
+        
+        <!-- URL Input Section -->
+        <section class="mb-4">
+            <div class="card shadow-sm">
+                <div class="card-body p-4">
+                    <form id="analyzer-form" class="needs-validation" novalidate>
+                        <label for="url-input" class="form-label">Enter website URL</label>
+                        <div class="input-group mb-3">
+                            <span class="input-group-text"><i class="fas fa-globe"></i></span>
+                            <input type="url" class="form-control" id="url-input" 
+                                   placeholder="https://" required>
+                            <button type="submit" class="btn btn-dark">
+                                Analyze
+                            </button>
+                        </div>
+                        <div class="invalid-feedback">
+                            Please enter a valid URL
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </section>
+        
+        <!-- Loading Indicator -->
+        <div id="loading-indicator" class="text-center my-5 d-none">
+            <div class="spinner-border text-primary" role="status">
+                <span class="visually-hidden">Loading...</span>
+            </div>
+            <p class="mt-3">Analyzing website meta tags...</p>
+        </div>
+        
+        <!-- Results Section (Initially Hidden) -->
+        <section id="results-section" class="d-none">
+            <!-- SEO Score Section -->
+            <div class="card shadow-sm mb-4">
+                <div class="card-body">
+                    <div class="row align-items-center">
+                        <div class="col-md-3 text-center">
+                            <div id="seo-score-circle" class="score-circle mb-2">
+                                <span id="seo-score">0</span>
+                            </div>
+                            <p id="seo-score-text" class="text-center mb-0">Overall SEO Score</p>
+                            <p id="seo-score-rating" class="text-center small">Not Rated</p>
+                        </div>
+                        <div class="col-md-9">
+                            <h2 class="h5 mb-3">SEO Summary</h2>
+                            <div class="row">
+                                <div class="col-md-4 mb-3">
+                                    <div class="card bg-success-subtle text-success">
+                                        <div class="card-body py-2 px-3">
+                                            <div class="d-flex align-items-center">
+                                                <i class="fas fa-check-circle me-2"></i>
+                                                <div>
+                                                    <p class="mb-0">Passed Checks</p>
+                                                    <h3 id="passed-checks-count" class="h4 mb-0">0</h3>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="col-md-4 mb-3">
+                                    <div class="card bg-warning-subtle text-warning">
+                                        <div class="card-body py-2 px-3">
+                                            <div class="d-flex align-items-center">
+                                                <i class="fas fa-exclamation-triangle me-2"></i>
+                                                <div>
+                                                    <p class="mb-0">Warnings</p>
+                                                    <h3 id="warnings-count" class="h4 mb-0">0</h3>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="col-md-4 mb-3">
+                                    <div class="card bg-danger-subtle text-danger">
+                                        <div class="card-body py-2 px-3">
+                                            <div class="d-flex align-items-center">
+                                                <i class="fas fa-times-circle me-2"></i>
+                                                <div>
+                                                    <p class="mb-0">Failed Checks</p>
+                                                    <h3 id="failed-checks-count" class="h4 mb-0">0</h3>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- Preview Navigation -->
+            <ul class="nav nav-tabs mb-3" id="previewTabs" role="tablist">
+                <li class="nav-item" role="presentation">
+                    <button class="nav-link active" id="google-preview-tab" data-bs-toggle="tab" 
+                            data-bs-target="#google-preview-pane" type="button" role="tab">
+                        <i class="fab fa-google me-2"></i>Google Preview
+                    </button>
+                </li>
+                <li class="nav-item" role="presentation">
+                    <button class="nav-link" id="social-preview-tab" data-bs-toggle="tab" 
+                            data-bs-target="#social-preview-pane" type="button" role="tab">
+                        <i class="fas fa-share-alt me-2"></i>Social Media Previews
+                    </button>
+                </li>
+            </ul>
+            
+            <!-- Preview Tab Content -->
+            <div class="tab-content mb-4">
+                <!-- Google Preview Tab -->
+                <div class="tab-pane fade show active" id="google-preview-pane" role="tabpanel">
+                    <div class="card shadow-sm">
+                        <div class="card-body">
+                            <h3 class="h5 mb-3">Google Search Result Preview</h3>
+                            <div class="google-preview-box mb-4">
+                                <div id="google-title" class="google-title">Title Will Appear Here</div>
+                                <div id="google-url" class="google-url">URL will appear here</div>
+                                <div id="google-description" class="google-description">Description will appear here. This is where Google displays your meta description or a relevant snippet from your content.</div>
+                            </div>
+                            
+                            <h3 class="h5 mb-3">Search Engine Optimization Checks</h3>
+                            <div id="seo-checks-container">
+                                <!-- Title Tag Check -->
+                                <div class="card mb-3 border-warning">
+                                    <div class="card-body">
+                                        <div class="d-flex align-items-center mb-2">
+                                            <i class="fas fa-exclamation-triangle text-warning me-2"></i>
+                                            <h4 class="h6 mb-0">Title Tag</h4>
+                                            <span class="ms-auto badge bg-warning">Warning</span>
+                                        </div>
+                                        <p class="mb-1 small">Your title tag is too short (11 characters). Consider making it between 50-60 characters.</p>
+                                        <button class="btn btn-sm btn-link ps-0 text-decoration-none small">Show details</button>
+                                    </div>
+                                </div>
+                                <!-- Meta Description Check -->
+                                <div class="card mb-3 border-warning">
+                                    <div class="card-body">
+                                        <div class="d-flex align-items-center mb-2">
+                                            <i class="fas fa-exclamation-triangle text-warning me-2"></i>
+                                            <h4 class="h6 mb-0">Meta Description</h4>
+                                            <span class="ms-auto badge bg-warning">Warning</span>
+                                        </div>
+                                        <p class="mb-1 small">Your meta description is a bit short (32 characters). Consider expanding it to 120-155 characters.</p>
+                                        <button class="btn btn-sm btn-link ps-0 text-decoration-none small">Show details</button>
+                                    </div>
+                                </div>
+                                <!-- Meta Keywords Check -->
+                                <div class="card mb-3 border-success">
+                                    <div class="card-body">
+                                        <div class="d-flex align-items-center mb-2">
+                                            <i class="fas fa-check-circle text-success me-2"></i>
+                                            <h4 class="h6 mb-0">Meta Keywords</h4>
+                                            <span class="ms-auto badge bg-success">Passed</span>
+                                        </div>
+                                        <p class="mb-1 small">Meta keywords tag is present. While not critical for Google, it may be useful for other search engines.</p>
+                                        <button class="btn btn-sm btn-link ps-0 text-decoration-none small">Show details</button>
+                                    </div>
+                                </div>
+                                <!-- Viewport Meta Tag Check -->
+                                <div class="card mb-3 border-success">
+                                    <div class="card-body">
+                                        <div class="d-flex align-items-center mb-2">
+                                            <i class="fas fa-check-circle text-success me-2"></i>
+                                            <h4 class="h6 mb-0">Viewport Meta Tag</h4>
+                                            <span class="ms-auto badge bg-success">Passed</span>
+                                        </div>
+                                        <p class="mb-1 small">Viewport meta tag is properly set, which is good for mobile optimization.</p>
+                                        <button class="btn btn-sm btn-link ps-0 text-decoration-none small">Show details</button>
+                                    </div>
+                                </div>
+                                <!-- Robots Meta Tag Check -->
+                                <div class="card mb-3 border-success">
+                                    <div class="card-body">
+                                        <div class="d-flex align-items-center mb-2">
+                                            <i class="fas fa-check-circle text-success me-2"></i>
+                                            <h4 class="h6 mb-0">Robots Meta Tag</h4>
+                                            <span class="ms-auto badge bg-success">Passed</span>
+                                        </div>
+                                        <p class="mb-1 small">Robots meta tag allows indexing and following links.</p>
+                                        <button class="btn btn-sm btn-link ps-0 text-decoration-none small">Show details</button>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- Social Media Previews Tab -->
+                <div class="tab-pane fade" id="social-preview-pane" role="tabpanel">
+                    <div class="card shadow-sm">
+                        <div class="card-body">
+                            <h3 class="h5 mb-3">Social Media Previews</h3>
+                            
+                            <!-- Facebook/Open Graph Preview -->
+                            <h4 class="h6 mb-3">
+                                <i class="fab fa-facebook text-primary me-2"></i>
+                                Facebook / Open Graph Preview
+                            </h4>
+                            <div class="facebook-preview-box mb-4">
+                                <div id="facebook-image" class="facebook-image">
+                                    <img src="https://via.placeholder.com/1200x630" alt="Preview" class="img-fluid" id="og-image-preview">
+                                </div>
+                                <div class="facebook-content">
+                                    <div id="facebook-domain" class="facebook-domain">domain.com</div>
+                                    <div id="facebook-title" class="facebook-title">Title will appear here</div>
+                                    <div id="facebook-description" class="facebook-description">Description will appear here. This is where Facebook displays your meta description.</div>
+                                </div>
+                            </div>
+                            
+                            <!-- Open Graph Tags Table -->
+                            <h5 class="h6 mb-2">Open Graph Tags</h5>
+                            <div class="table-responsive mb-4">
+                                <table class="table table-sm">
+                                    <thead>
+                                        <tr>
+                                            <th style="width: 30%">Property</th>
+                                            <th>Content</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody id="og-tags-table">
+                                        <tr>
+                                            <td>og:title</td>
+                                            <td>Title content will appear here</td>
+                                        </tr>
+                                        <tr>
+                                            <td>og:description</td>
+                                            <td>Description content will appear here</td>
+                                        </tr>
+                                        <tr>
+                                            <td>og:url</td>
+                                            <td>URL will appear here</td>
+                                        </tr>
+                                        <tr>
+                                            <td>og:site_name</td>
+                                            <td>Site name will appear here</td>
+                                        </tr>
+                                        <tr>
+                                            <td>og:locale</td>
+                                            <td>Locale will appear here</td>
+                                        </tr>
+                                    </tbody>
+                                </table>
+                            </div>
+                            
+                            <!-- Twitter Preview -->
+                            <h4 class="h6 mb-3">
+                                <i class="fab fa-twitter text-info me-2"></i>
+                                Twitter Card Preview
+                            </h4>
+                            <div class="twitter-preview-box mb-4">
+                                <div id="twitter-image" class="twitter-image">
+                                    <img src="https://via.placeholder.com/1200x600" alt="Preview" class="img-fluid" id="twitter-image-preview">
+                                </div>
+                                <div class="twitter-content">
+                                    <div id="twitter-title-preview" class="twitter-title">Title will appear here</div>
+                                    <div id="twitter-description-preview" class="twitter-description">Description will appear here</div>
+                                    <div id="twitter-domain" class="twitter-domain">domain.com</div>
+                                </div>
+                            </div>
+                            
+                            <!-- Twitter Card Tags Table -->
+                            <h5 class="h6 mb-2">Twitter Card Tags</h5>
+                            <div class="table-responsive">
+                                <table class="table table-sm">
+                                    <thead>
+                                        <tr>
+                                            <th style="width: 30%">Property</th>
+                                            <th>Content</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody id="twitter-tags-table">
+                                        <tr>
+                                            <td>twitter:card</td>
+                                            <td>Card type will appear here</td>
+                                        </tr>
+                                        <tr>
+                                            <td>twitter:title</td>
+                                            <td>Title content will appear here</td>
+                                        </tr>
+                                        <tr>
+                                            <td>twitter:description</td>
+                                            <td>Description content will appear here</td>
+                                        </tr>
+                                        <tr>
+                                            <td>twitter:image</td>
+                                            <td>Image URL will appear here</td>
+                                        </tr>
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- SEO Recommendations Section -->
+            <div class="card shadow-sm">
+                <div class="card-body">
+                    <h3 class="h5 mb-3">SEO Recommendations</h3>
+                    <div id="recommendations-container">
+                        <!-- Recommendation Items -->
+                        <div class="card mb-3 border-start border-warning border-4">
+                            <div class="card-body py-3">
+                                <h5 class="h6 mb-2">Optimize Title Tag</h5>
+                                <p class="mb-0 small">Your title tag is too short (11 characters). Consider making it between 50-60 characters.</p>
+                            </div>
+                        </div>
+                        <div class="card mb-3 border-start border-danger border-4">
+                            <div class="card-body py-3">
+                                <h5 class="h6 mb-2">Improve Meta Description</h5>
+                                <p class="mb-0 small">Your meta description is a bit short (32 characters). Consider expanding it to 120-155 characters.</p>
+                            </div>
+                        </div>
+                        <div class="card mb-3 border-start border-success border-4">
+                            <div class="card-body py-3">
+                                <h5 class="h6 mb-2">Good Meta Keywords</h5>
+                                <p class="mb-0 small">Meta keywords tag is present. While not critical for Google, it may be useful for other search engines.</p>
+                            </div>
+                        </div>
+                        <div class="card mb-3 border-start border-success border-4">
+                            <div class="card-body py-3">
+                                <h5 class="h6 mb-2">Good Viewport Meta Tag</h5>
+                                <p class="mb-0 small">Viewport meta tag is properly set, which is good for mobile optimization.</p>
+                            </div>
+                        </div>
+                        <div class="card mb-3 border-start border-success border-4">
+                            <div class="card-body py-3">
+                                <h5 class="h6 mb-2">Good Robots Meta Tag</h5>
+                                <p class="mb-0 small">Robots meta tag allows indexing and following links.</p>
+                            </div>
+                        </div>
+                        <div class="card mb-3 border-start border-success border-4">
+                            <div class="card-body py-3">
+                                <h5 class="h6 mb-2">Good Open Graph Tags</h5>
+                                <p class="mb-0 small">All essential Open Graph tags are present for optimal social sharing.</p>
+                            </div>
+                        </div>
+                        <!-- End of Recommendation Items -->
+                    </div>
+                </div>
+            </div>
+        </section>
+        
+        <!-- Error Alert (Initially Hidden) -->
+        <div id="error-alert" class="alert alert-danger d-none" role="alert">
+            <i class="fas fa-exclamation-circle me-2"></i>
+            <span id="error-message">Error message will appear here</span>
+        </div>
+    </div>
+
+    <!-- Bootstrap JS Bundle with Popper -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+    
+    <!-- Custom JavaScript -->
+    <script src="{{ url_for('static', filename='js/script.js') }}"></script>
+</body>
+</html>

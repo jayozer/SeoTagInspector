@@ -17,34 +17,29 @@
 </head>
 <body>
     <!-- Main Container -->
-    <div class="container pt-4 pb-5">
+    <div class="container py-4">
         <!-- Header -->
-        <header class="text-center mb-5">
-            <h1 class="display-4 mb-3">
-                <i class="fas fa-search me-2 text-primary"></i>
-                SEO Meta Tag Analyzer
-            </h1>
-            <p class="lead">Visualize and optimize your website's SEO meta tags</p>
+        <header class="mb-4">
+            <h1 class="mb-1">SEO Meta Tag Analyzer</h1>
+            <p class="text-muted">Analyze and visualize SEO tags to improve your website's optimization</p>
         </header>
         
         <!-- URL Input Section -->
-        <section class="mb-5">
+        <section class="mb-4">
             <div class="card shadow-sm">
                 <div class="card-body p-4">
                     <form id="analyzer-form" class="needs-validation" novalidate>
-                        <div class="mb-3">
-                            <label for="url-input" class="form-label">Enter Website URL</label>
-                            <div class="input-group">
-                                <span class="input-group-text"><i class="fas fa-globe"></i></span>
-                                <input type="url" class="form-control form-control-lg" id="url-input" 
-                                       placeholder="https://example.com" required>
-                                <button type="submit" class="btn btn-primary">
-                                    <i class="fas fa-search me-2"></i>Analyze
-                                </button>
-                            </div>
-                            <div class="invalid-feedback">
-                                Please enter a valid URL
-                            </div>
+                        <label for="url-input" class="form-label">Enter website URL</label>
+                        <div class="input-group mb-3">
+                            <span class="input-group-text"><i class="fas fa-globe"></i></span>
+                            <input type="url" class="form-control" id="url-input" 
+                                   placeholder="https://" required>
+                            <button type="submit" class="btn btn-dark">
+                                Analyze
+                            </button>
+                        </div>
+                        <div class="invalid-feedback">
+                            Please enter a valid URL
                         </div>
                     </form>
                 </div>
@@ -61,27 +56,77 @@
         
         <!-- Results Section (Initially Hidden) -->
         <section id="results-section" class="d-none">
-            <!-- Tabs Navigation -->
-            <ul class="nav nav-tabs mb-4" id="resultTabs" role="tablist">
+            <!-- SEO Score Section -->
+            <div class="card shadow-sm mb-4">
+                <div class="card-body">
+                    <div class="row align-items-center">
+                        <div class="col-md-3 text-center">
+                            <div id="seo-score-circle" class="score-circle mb-2">
+                                <span id="seo-score">0</span>
+                            </div>
+                            <p id="seo-score-text" class="text-center mb-0">Overall SEO Score</p>
+                            <p id="seo-score-rating" class="text-center small">Not Rated</p>
+                        </div>
+                        <div class="col-md-9">
+                            <h2 class="h5 mb-3">SEO Summary</h2>
+                            <div class="row">
+                                <div class="col-md-4 mb-3">
+                                    <div class="card bg-success-subtle text-success">
+                                        <div class="card-body py-2 px-3">
+                                            <div class="d-flex align-items-center">
+                                                <i class="fas fa-check-circle me-2"></i>
+                                                <div>
+                                                    <p class="mb-0">Passed Checks</p>
+                                                    <h3 id="passed-checks-count" class="h4 mb-0">0</h3>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="col-md-4 mb-3">
+                                    <div class="card bg-warning-subtle text-warning">
+                                        <div class="card-body py-2 px-3">
+                                            <div class="d-flex align-items-center">
+                                                <i class="fas fa-exclamation-triangle me-2"></i>
+                                                <div>
+                                                    <p class="mb-0">Warnings</p>
+                                                    <h3 id="warnings-count" class="h4 mb-0">0</h3>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="col-md-4 mb-3">
+                                    <div class="card bg-danger-subtle text-danger">
+                                        <div class="card-body py-2 px-3">
+                                            <div class="d-flex align-items-center">
+                                                <i class="fas fa-times-circle me-2"></i>
+                                                <div>
+                                                    <p class="mb-0">Failed Checks</p>
+                                                    <h3 id="failed-checks-count" class="h4 mb-0">0</h3>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- Preview Navigation -->
+            <ul class="nav nav-tabs mb-3" id="previewTabs" role="tablist">
                 <li class="nav-item" role="presentation">
-                    <button class="nav-link active" id="overview-tab" data-bs-toggle="tab" 
-                            data-bs-target="#overview" type="button" role="tab" 
-                            aria-controls="overview" aria-selected="true">
-                        <i class="fas fa-list-check me-2"></i>Overview
+                    <button class="nav-link active" id="google-preview-tab" data-bs-toggle="tab" 
+                            data-bs-target="#google-preview-pane" type="button" role="tab">
+                        <i class="fab fa-google me-2"></i>Google Preview
                     </button>
                 </li>
                 <li class="nav-item" role="presentation">
-                    <button class="nav-link" id="previews-tab" data-bs-toggle="tab" 
-                            data-bs-target="#previews" type="button" role="tab" 
-                            aria-controls="previews" aria-selected="false">
-                        <i class="fas fa-eye me-2"></i>Previews
-                    </button>
-                </li>
-                <li class="nav-item" role="presentation">
-                    <button class="nav-link" id="recommendations-tab" data-bs-toggle="tab" 
-                            data-bs-target="#recommendations" type="button" role="tab" 
-                            aria-controls="recommendations" aria-selected="false">
-                        <i class="fas fa-lightbulb me-2"></i>Recommendations
+                    <button class="nav-link" id="social-preview-tab" data-bs-toggle="tab" 
+                            data-bs-target="#social-preview-pane" type="button" role="tab">
+                        <i class="fas fa-share-alt me-2"></i>Social Media Previews
                     </button>
                 </li>
             </ul>
