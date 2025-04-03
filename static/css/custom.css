@@ -20,15 +20,7 @@ body {
     position: relative;
 }
 
-.score-circle:after {
-    content: '/100';
-    display: block;
-    position: absolute;
-    bottom: -1.5rem;
-    font-size: 0.875rem;
-    color: #6c757d;
-    font-weight: normal;
-}
+/* Removed the /100 from score circle as requested */
 
 .score-excellent {
     border-color: #28a745;
@@ -97,6 +89,7 @@ body {
     font-family: Helvetica, Arial, sans-serif;
     max-width: 500px;
     border: 1px solid rgba(0, 0, 0, 0.125);
+    margin: 0 auto;
 }
 
 .facebook-image {
@@ -188,6 +181,7 @@ body {
     font-family: -apple-system, BlinkMacSystemFont, Segoe UI, Roboto, Helvetica, Arial, sans-serif;
     max-width: 500px;
     border: 1px solid rgba(0, 0, 0, 0.125);
+    margin: 0 auto;
 }
 
 .twitter-image {
@@ -254,4 +248,86 @@ body {
 
 .border-danger-custom {
     border-left: 4px solid #dc3545;
+}
+
+/* Mobile responsive fixes */
+@media (max-width: 767.98px) {
+    .score-circle {
+        width: 80px;
+        height: 80px;
+        font-size: 1.5rem;
+        margin-bottom: 1rem;
+    }
+    
+    .btn {
+        padding-left: 1rem;
+        padding-right: 1rem;
+    }
+    
+    .card-body {
+        padding: 1rem;
+    }
+    
+    .google-preview-box,
+    .facebook-preview-box,
+    .twitter-preview-box {
+        max-width: 100%;
+    }
+}
+
+/* Table alignment fixes */
+.table-responsive {
+    margin: 0 auto;
+}
+
+.table-sm th, .table-sm td {
+    padding: 0.5rem;
+}
+
+/* Make all cards have consistent padding */
+.card {
+    margin-bottom: 1.5rem;
+}
+
+.card-header {
+    padding: 0.75rem 1.25rem;
+}
+
+/* Better tab navigation for small screens */
+.nav-tabs .nav-link {
+    padding: 0.5rem 0.75rem;
+}
+
+@media (max-width: 575.98px) {
+    .nav-tabs .nav-link {
+        padding: 0.5rem;
+    }
+}
+
+/* Center align tag tables */
+.tag-item {
+    background-color: rgba(var(--bs-secondary-rgb), 0.1);
+    border-radius: 0.25rem;
+    padding: 0.25rem 0.5rem;
+    margin-bottom: 0.5rem;
+    font-size: 0.875rem;
+}
+
+/* Fix for scores in social media preview tab */
+#seo-score-value {
+    font-size: 2rem;
+    font-weight: bold;
+}
+
+#seo-score-label {
+    font-weight: bold;
+}
+
+.score-value {
+    font-size: 1.25rem;
+    font-weight: bold;
+}
+
+.score-name {
+    color: var(--bs-secondary);
 }

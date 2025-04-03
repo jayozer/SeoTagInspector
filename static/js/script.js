@@ -118,7 +118,7 @@ document.addEventListener('DOMContentLoaded', function() {
         
         // Update score in main section
         const scoreElement = document.getElementById('seo-score');
-        const scoreCircle = document.getElementById('seo-score-circle');
+        const scoreCircle = document.getElementById('main-seo-score-circle');
         const scoreRating = document.getElementById('seo-score-rating');
         
         if (scoreElement) scoreElement.textContent = score;
@@ -426,6 +426,12 @@ document.addEventListener('DOMContentLoaded', function() {
     
     // Display Recommendations
     function displayRecommendations(recommendations) {
+        /* Function moved to external file. We call the implementation from there */
+        updateRecommendationsContainer("recommendations-container", recommendations);
+        updateRecommendationsContainer("tab-recommendations-container", recommendations);
+    }
+
+    function updateRecommendationsContainer(containerId, recommendations) {
         const container = document.getElementById('recommendations-container');
         if (!container) {
             console.warn("Recommendations container not found");

@@ -61,7 +61,7 @@
                 <div class="card-body">
                     <div class="row align-items-center">
                         <div class="col-md-3 text-center">
-                            <div id="seo-score-circle" class="score-circle mb-2">
+                            <div id="main-seo-score-circle" class="score-circle mb-2">
                                 <span id="seo-score">0</span>
                             </div>
                             <p id="seo-score-text" class="text-center mb-0">Overall SEO Score</p>
@@ -472,7 +472,7 @@
                                 </div>
                                 <div class="card-body text-center">
                                     <div class="score-display mb-3">
-                                        <div id="seo-score-circle" class="score-circle">
+                                        <div id="social-seo-score-circle" class="score-circle">
                                             <span id="seo-score-value">--</span>
                                         </div>
                                     </div>
@@ -610,6 +610,7 @@
     
     <!-- Custom JavaScript -->
     <script src="{{ url_for('static', filename='js/script.js') }}"></script>
+    <script src="{{ url_for('static', filename='js/recommendations.js') }}"></script>
 </body>
 </html>
             <!-- Recommendations Section -->
@@ -621,7 +622,7 @@
                     </h5>
                 </div>
                 <div class="card-body">
-                    <div id="recommendations-container">
+                    <div id="tab-recommendations-container">
                         <p class="text-muted">Recommendations will be displayed here...</p>
                     </div>
                 </div>
