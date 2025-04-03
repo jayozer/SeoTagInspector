@@ -112,33 +112,35 @@ document.addEventListener('DOMContentLoaded', function() {
         const score = Math.round(((passedChecks + (warnings * 0.5)) / totalChecks) * 100);
         
         // Update counters
-        document.getElementById('passed-checks-count').textContent = passedChecks;
-        document.getElementById('warnings-count').textContent = warnings;
-        document.getElementById('failed-checks-count').textContent = failedChecks;
+        updateTextContent('passed-checks-count', passedChecks);
+        updateTextContent('warnings-count', warnings);
+        updateTextContent('failed-checks-count', failedChecks);
         
         // Update score
         const scoreElement = document.getElementById('seo-score');
         const scoreCircle = document.getElementById('seo-score-circle');
         const scoreRating = document.getElementById('seo-score-rating');
         
-        scoreElement.textContent = score;
+        if (scoreElement) scoreElement.textContent = score;
         
         // Clear previous classes
-        scoreCircle.classList.remove('score-excellent', 'score-good', 'score-average', 'score-poor');
-        
-        // Set appropriate class based on score
-        if (score >= 90) {
-            scoreCircle.classList.add('score-excellent');
-            scoreRating.textContent = 'Excellent';
-        } else if (score >= 70) {
-            scoreCircle.classList.add('score-good');
-            scoreRating.textContent = 'Good';
-        } else if (score >= 50) {
-            scoreCircle.classList.add('score-average');
-            scoreRating.textContent = 'Average';
-        } else {
-            scoreCircle.classList.add('score-poor');
-            scoreRating.textContent = 'Poor';
+        if (scoreCircle) {
+            scoreCircle.classList.remove('score-excellent', 'score-good', 'score-average', 'score-poor');
+            
+            // Set appropriate class based on score
+            if (score >= 90) {
+                scoreCircle.classList.add('score-excellent');
+                if (scoreRating) scoreRating.textContent = 'Excellent';
+            } else if (score >= 70) {
+                scoreCircle.classList.add('score-good');
+                if (scoreRating) scoreRating.textContent = 'Good';
+            } else if (score >= 50) {
+                scoreCircle.classList.add('score-average');
+                if (scoreRating) scoreRating.textContent = 'Average';
+            } else {
+                scoreCircle.classList.add('score-poor');
+                if (scoreRating) scoreRating.textContent = 'Poor';
+            }
         }
     }
     
@@ -153,6 +155,11 @@ document.addEventListener('DOMContentLoaded', function() {
     // Display SEO Checks
     function displaySeoChecks(data) {
         const container = document.getElementById('seo-checks-container');
+        if (!container) {
+            console.warn("SEO checks container not found");
+            return;
+        }
+        
         container.innerHTML = '';
         
         // Add Title Check
@@ -165,8 +172,8 @@ document.addEventListener('DOMContentLoaded', function() {
         
         // Add Meta Keywords Check
         // This is a simplified example - in a real app, you'd check if keywords exist
-        const keywordsStatus = data.meta_keywords ? 'good' : 'warning';
-        const keywordsMessage = data.meta_keywords 
+        const keywordsStatus = data.meta_keywords && data.meta_keywords.content ? 'good' : 'warning';
+        const keywordsMessage = data.meta_keywords && data.meta_keywords.content 
             ? 'Meta keywords tag is present. While not critical for Google, it may be useful for other search engines.'
             : 'Meta keywords tag is missing. While not critical for Google, it may be useful for other search engines.';
         
@@ -293,6 +300,10 @@ document.addEventListener('DOMContentLoaded', function() {
     // Update social image preview
     function updateSocialImage(containerId, imageUrl) {
         const container = document.getElementById(containerId);
+        if (!container) {
+            console.warn(`Social image container '${containerId}' not found`);
+            return;
+        }
         
         if (imageUrl) {
             // Create an image element
@@ -311,6 +322,11 @@ document.addEventListener('DOMContentLoaded', function() {
     // Update Open Graph tags table
     function updateOgTagsTable(ogTags) {
         const table = document.getElementById('og-tags-table');
+        if (!table) {
+            console.warn("OG tags table not found");
+            return;
+        }
+        
         table.innerHTML = '';
         
         const commonTags = ['og:title', 'og:description', 'og:url', 'og:site_name', 'og:locale'];
@@ -338,6 +354,11 @@ document.addEventListener('DOMContentLoaded', function() {
     // Update Twitter Card tags table
     function updateTwitterTagsTable(twitterTags) {
         const table = document.getElementById('twitter-tags-table');
+        if (!table) {
+            console.warn("Twitter tags table not found");
+            return;
+        }
+        
         table.innerHTML = '';
         
         const commonTags = ['twitter:card', 'twitter:title', 'twitter:description', 'twitter:image'];
@@ -365,6 +386,11 @@ document.addEventListener('DOMContentLoaded', function() {
     // Display Recommendations
     function displayRecommendations(recommendations) {
         const container = document.getElementById('recommendations-container');
+        if (!container) {
+            console.warn("Recommendations container not found");
+            return;
+        }
+        
         container.innerHTML = '';
         
         if (recommendations && recommendations.length > 0) {
@@ -411,22 +437,33 @@ document.addEventListener('DOMContentLoaded', function() {
     
     // Utility Functions
     function showElement(element) {
-        element.classList.remove('d-none');
+        if (element) {
+            element.classList.remove('d-none');
+        }
     }
     
     function hideElement(element) {
-        element.classList.add('d-none');
+        if (element) {
+            element.classList.add('d-none');
+        }
     }
     
     function updateTextContent(elementId, content) {
         const element = document.getElementById(elementId);
         if (element) {
             element.textContent = content;
+        } else {
+            console.warn(`Element with id '${elementId}' not found`);
         }
     }
     
     function showError(message) {
-        errorMessage.textContent = message;
-        showElement(errorAlert);
+        if (errorMessage) {
+            errorMessage.textContent = message;
+            showElement(errorAlert);
+        } else {
+            console.error('Error message element not found');
+            alert(message); // Fallback to alert if element not found
+        }
     }
 });
