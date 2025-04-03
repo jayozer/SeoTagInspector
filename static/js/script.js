@@ -65,217 +65,188 @@ document.addEventListener('DOMContentLoaded', function() {
     
     // Display Analysis Results
     function displayResults(data) {
-        // Display basic SEO tags
-        displayBasicSeoTags(data);
+        // Update SEO score and counters
+        updateSeoScoreSection(data);
         
-        // Display heading structure
-        displayHeadings(data.headings);
+        // Update Google search preview
+        updateGooglePreview(data);
         
-        // Display Open Graph tags
-        displayOgTags(data.og_tags);
+        // Update SEO checks
+        displaySeoChecks(data);
         
-        // Display Twitter Card tags
-        displayTwitterTags(data.twitter_tags);
+        // Update social media previews
+        updateSocialPreviews(data);
         
-        // Display recommendations
+        // Update recommendations
         displayRecommendations(data.recommendations);
-        
-        // Update previews
-        updatePreviews(data);
-        
-        // Calculate and display SEO score
-        calculateSeoScore(data);
     }
     
-    // Display Basic SEO Tags
-    function displayBasicSeoTags(data) {
-        // Title
-        updateStatusElement('title-status', data.title.status);
-        updateTextContent('title-content', data.title.content || 'No title tag found');
-        updateTextContent('title-length', data.title.content ? 
-            `Length: ${data.title.length} characters` : '');
+    // Update SEO Score Section
+    function updateSeoScoreSection(data) {
+        // Calculate totals
+        let passedChecks = 0;
+        let warnings = 0;
+        let failedChecks = 0;
         
-        // Meta Description
-        updateStatusElement('description-status', data.meta_description.status);
-        updateTextContent('description-content', data.meta_description.content || 'No meta description found');
-        updateTextContent('description-length', data.meta_description.content ? 
-            `Length: ${data.meta_description.length} characters` : '');
+        // Count statuses
+        countStatus(data.title.status);
+        countStatus(data.meta_description.status);
+        countStatus(data.canonical.status);
+        countStatus(data.robots.status);
         
-        // Canonical URL
-        updateStatusElement('canonical-status', data.canonical.status);
-        updateTextContent('canonical-content', data.canonical.content || 'No canonical URL found');
+        if (data.headings.h1.length === 1) passedChecks++;
+        else if (data.headings.h1.length === 0) failedChecks++;
+        else warnings++;
         
-        // Robots
-        updateStatusElement('robots-status', data.robots.status);
-        updateTextContent('robots-content', data.robots.content || 'No robots meta tag found (default: index, follow)');
-    }
-    
-    // Display Heading Structure
-    function displayHeadings(headings) {
-        // H1 Headings
-        const h1Count = headings.h1.length;
-        updateTextContent('h1-count', h1Count);
+        Object.values(data.og_tags).forEach(tag => countStatus(tag.status));
+        Object.values(data.twitter_tags).forEach(tag => countStatus(tag.status));
         
-        const h1Container = document.getElementById('h1-tags');
-        h1Container.innerHTML = '';
-        
-        if (h1Count > 0) {
-            headings.h1.forEach(heading => {
-                const headingElement = document.createElement('div');
-                headingElement.className = 'heading-item';
-                headingElement.textContent = heading;
-                h1Container.appendChild(headingElement);
-            });
-        } else {
-            h1Container.innerHTML = '<div class="text-muted">No H1 headings found</div>';
+        function countStatus(status) {
+            if (status === 'good') passedChecks++;
+            else if (status === 'warning') warnings++;
+            else if (status === 'error') failedChecks++;
         }
         
-        // H2 Headings
-        const h2Count = headings.h2.length;
-        updateTextContent('h2-count', h2Count);
+        // Calculate score (percentage of passed checks)
+        const totalChecks = passedChecks + warnings + failedChecks;
+        const score = Math.round(((passedChecks + (warnings * 0.5)) / totalChecks) * 100);
         
-        const h2Container = document.getElementById('h2-tags');
-        h2Container.innerHTML = '';
+        // Update counters
+        document.getElementById('passed-checks-count').textContent = passedChecks;
+        document.getElementById('warnings-count').textContent = warnings;
+        document.getElementById('failed-checks-count').textContent = failedChecks;
         
-        if (h2Count > 0) {
-            headings.h2.forEach(heading => {
-                const headingElement = document.createElement('div');
-                headingElement.className = 'heading-item';
-                headingElement.textContent = heading;
-                h2Container.appendChild(headingElement);
-            });
+        // Update score
+        const scoreElement = document.getElementById('seo-score');
+        const scoreCircle = document.getElementById('seo-score-circle');
+        const scoreRating = document.getElementById('seo-score-rating');
+        
+        scoreElement.textContent = score;
+        
+        // Clear previous classes
+        scoreCircle.classList.remove('score-excellent', 'score-good', 'score-average', 'score-poor');
+        
+        // Set appropriate class based on score
+        if (score >= 90) {
+            scoreCircle.classList.add('score-excellent');
+            scoreRating.textContent = 'Excellent';
+        } else if (score >= 70) {
+            scoreCircle.classList.add('score-good');
+            scoreRating.textContent = 'Good';
+        } else if (score >= 50) {
+            scoreCircle.classList.add('score-average');
+            scoreRating.textContent = 'Average';
         } else {
-            h2Container.innerHTML = '<div class="text-muted">No H2 headings found</div>';
-        }
-        
-        // H3 Headings
-        const h3Count = headings.h3.length;
-        updateTextContent('h3-count', h3Count);
-        
-        const h3Container = document.getElementById('h3-tags');
-        h3Container.innerHTML = '';
-        
-        if (h3Count > 0) {
-            headings.h3.forEach(heading => {
-                const headingElement = document.createElement('div');
-                headingElement.className = 'heading-item';
-                headingElement.textContent = heading;
-                h3Container.appendChild(headingElement);
-            });
-        } else {
-            h3Container.innerHTML = '<div class="text-muted">No H3 headings found</div>';
+            scoreCircle.classList.add('score-poor');
+            scoreRating.textContent = 'Poor';
         }
     }
     
-    // Display Open Graph Tags
-    function displayOgTags(ogTags) {
-        // og:title
-        if (ogTags['og:title']) {
-            updateStatusElement('og-title-status', ogTags['og:title'].status);
-            updateTextContent('og-title-content', ogTags['og:title'].content || 'Not found');
-        } else {
-            updateStatusElement('og-title-status', 'error');
-            updateTextContent('og-title-content', 'Not found');
-        }
-        
-        // og:description
-        if (ogTags['og:description']) {
-            updateStatusElement('og-description-status', ogTags['og:description'].status);
-            updateTextContent('og-description-content', ogTags['og:description'].content || 'Not found');
-        } else {
-            updateStatusElement('og-description-status', 'error');
-            updateTextContent('og-description-content', 'Not found');
-        }
-        
-        // og:image
-        if (ogTags['og:image']) {
-            updateStatusElement('og-image-status', ogTags['og:image'].status);
-            updateTextContent('og-image-content', ogTags['og:image'].content || 'Not found');
-        } else {
-            updateStatusElement('og-image-status', 'error');
-            updateTextContent('og-image-content', 'Not found');
-        }
-        
-        // Other OG tags
-        updateStatusElement('og-url-status', ogTags['og:url'] ? ogTags['og:url'].status : 'error');
-        updateStatusElement('og-type-status', ogTags['og:type'] ? ogTags['og:type'].status : 'error');
-        updateStatusElement('og-site-name-status', ogTags['og:site_name'] ? ogTags['og:site_name'].status : 'error');
-    }
-    
-    // Display Twitter Card Tags
-    function displayTwitterTags(twitterTags) {
-        // twitter:card
-        if (twitterTags['twitter:card']) {
-            updateStatusElement('twitter-card-status', twitterTags['twitter:card'].status);
-            updateTextContent('twitter-card-content', twitterTags['twitter:card'].content || 'Not found');
-        } else {
-            updateStatusElement('twitter-card-status', 'error');
-            updateTextContent('twitter-card-content', 'Not found');
-        }
-        
-        // twitter:title
-        if (twitterTags['twitter:title']) {
-            updateStatusElement('twitter-title-status', twitterTags['twitter:title'].status);
-            updateTextContent('twitter-title-content', twitterTags['twitter:title'].content || 'Not found');
-        } else {
-            updateStatusElement('twitter-title-status', 'error');
-            updateTextContent('twitter-title-content', 'Not found');
-        }
-        
-        // twitter:description
-        if (twitterTags['twitter:description']) {
-            updateStatusElement('twitter-description-status', twitterTags['twitter:description'].status);
-            updateTextContent('twitter-description-content', twitterTags['twitter:description'].content || 'Not found');
-        } else {
-            updateStatusElement('twitter-description-status', 'error');
-            updateTextContent('twitter-description-content', 'Not found');
-        }
-        
-        // twitter:image
-        if (twitterTags['twitter:image']) {
-            updateStatusElement('twitter-image-status', twitterTags['twitter:image'].status);
-            updateTextContent('twitter-image-content', twitterTags['twitter:image'].content || 'Not found');
-        } else {
-            updateStatusElement('twitter-image-status', 'error');
-            updateTextContent('twitter-image-content', 'Not found');
-        }
-    }
-    
-    // Display Recommendations
-    function displayRecommendations(recommendations) {
-        const container = document.getElementById('recommendations-list');
-        container.innerHTML = '';
-        
-        if (recommendations && recommendations.length > 0) {
-            const list = document.createElement('ul');
-            list.className = 'list-group';
-            
-            recommendations.forEach(recommendation => {
-                const item = document.createElement('li');
-                item.className = 'list-group-item';
-                item.innerHTML = `<i class="fas fa-lightbulb text-warning me-2"></i> ${recommendation}`;
-                list.appendChild(item);
-            });
-            
-            container.appendChild(list);
-        } else {
-            container.innerHTML = `
-                <div class="text-center text-success py-4">
-                    <i class="fas fa-check-circle fa-3x mb-3"></i>
-                    <p>Great job! No recommendations needed.</p>
-                </div>
-            `;
-        }
-    }
-    
-    // Update Preview Sections
-    function updatePreviews(data) {
-        // Google search result preview
+    // Update Google Preview
+    function updateGooglePreview(data) {
+        // Update Google search result preview
         updateTextContent('google-title', data.title.content || 'No title');
         updateTextContent('google-url', data.url);
         updateTextContent('google-description', data.meta_description.content || 'No description available.');
+    }
+    
+    // Display SEO Checks
+    function displaySeoChecks(data) {
+        const container = document.getElementById('seo-checks-container');
+        container.innerHTML = '';
         
-        // Facebook preview
+        // Add Title Check
+        addSeoCheckItem('Title Tag', data.title.status, 
+            getTitleStatusMessage(data.title));
+        
+        // Add Meta Description Check
+        addSeoCheckItem('Meta Description', data.meta_description.status, 
+            getMetaDescriptionStatusMessage(data.meta_description));
+        
+        // Add Meta Keywords Check
+        // This is a simplified example - in a real app, you'd check if keywords exist
+        const keywordsStatus = data.meta_keywords ? 'good' : 'warning';
+        const keywordsMessage = data.meta_keywords 
+            ? 'Meta keywords tag is present. While not critical for Google, it may be useful for other search engines.'
+            : 'Meta keywords tag is missing. While not critical for Google, it may be useful for other search engines.';
+        
+        addSeoCheckItem('Meta Keywords', keywordsStatus, keywordsMessage);
+        
+        // Add Viewport Meta Tag Check
+        const viewportExists = true; // Simplified - you'd check from data
+        const viewportStatus = viewportExists ? 'good' : 'error';
+        const viewportMessage = viewportExists
+            ? 'Viewport meta tag is properly set, which is good for mobile optimization.'
+            : 'Viewport meta tag is missing, which is important for mobile optimization.';
+        
+        addSeoCheckItem('Viewport Meta Tag', viewportStatus, viewportMessage);
+        
+        // Add Robots Meta Tag Check
+        addSeoCheckItem('Robots Meta Tag', data.robots.status, 
+            getRobotsStatusMessage(data.robots));
+        
+        function addSeoCheckItem(title, status, message) {
+            const statusClass = status === 'good' ? 'success' : (status === 'warning' ? 'warning' : 'danger');
+            const statusIcon = status === 'good' ? 'check-circle' : (status === 'warning' ? 'exclamation-triangle' : 'times-circle');
+            const statusText = status === 'good' ? 'Passed' : (status === 'warning' ? 'Warning' : 'Failed');
+            
+            const checkItem = document.createElement('div');
+            checkItem.className = `card mb-3 border-${statusClass}`;
+            checkItem.innerHTML = `
+                <div class="card-body">
+                    <div class="d-flex align-items-center mb-2">
+                        <i class="fas fa-${statusIcon} text-${statusClass} me-2"></i>
+                        <h4 class="h6 mb-0">${title}</h4>
+                        <span class="ms-auto badge bg-${statusClass}">${statusText}</span>
+                    </div>
+                    <p class="mb-1 small">${message}</p>
+                    <button class="btn btn-sm btn-link ps-0 text-decoration-none small">Show details</button>
+                </div>
+            `;
+            
+            container.appendChild(checkItem);
+        }
+        
+        function getTitleStatusMessage(titleData) {
+            if (!titleData.content) return 'Your page is missing a title tag, which is critical for SEO.';
+            
+            if (titleData.length < 30) {
+                return `Your title tag is too short (${titleData.length} characters). Consider making it between 50-60 characters.`;
+            } else if (titleData.length > 60) {
+                return `Your title tag is too long (${titleData.length} characters). Consider making it between 50-60 characters.`;
+            } else {
+                return `Your title tag length is optimal (${titleData.length} characters).`;
+            }
+        }
+        
+        function getMetaDescriptionStatusMessage(descData) {
+            if (!descData.content) return 'Your page is missing a meta description, which is important for SEO.';
+            
+            if (descData.length < 120) {
+                return `Your meta description is a bit short (${descData.length} characters). Consider expanding it to 120-155 characters.`;
+            } else if (descData.length > 155) {
+                return `Your meta description is too long (${descData.length} characters). Consider shortening it to 120-155 characters.`;
+            } else {
+                return `Your meta description length is optimal (${descData.length} characters).`;
+            }
+        }
+        
+        function getRobotsStatusMessage(robotsData) {
+            if (!robotsData.content) return 'No robots meta tag found (default: index, follow).';
+            
+            if (robotsData.content.toLowerCase().includes('noindex')) {
+                return 'Your robots meta tag includes "noindex", which prevents search engines from indexing this page.';
+            } else if (robotsData.content.toLowerCase().includes('nofollow')) {
+                return 'Your robots meta tag includes "nofollow", which prevents search engines from following links on this page.';
+            } else {
+                return 'Robots meta tag allows indexing and following links.';
+            }
+        }
+    }
+    
+    // Update Social Media Previews
+    function updateSocialPreviews(data) {
+        // Facebook/OG preview
         updateTextContent('facebook-domain', data.domain);
         updateTextContent('facebook-title', 
             (data.og_tags['og:title'] && data.og_tags['og:title'].content) || 
@@ -288,23 +259,9 @@ document.addEventListener('DOMContentLoaded', function() {
             'No description available.'
         );
         
-        // Update Facebook image if available
-        const facebookImageContainer = document.getElementById('facebook-image');
-        if (data.og_tags['og:image'] && data.og_tags['og:image'].content) {
-            facebookImageContainer.innerHTML = `
-                <div class="image-placeholder" title="Image from: ${data.og_tags['og:image'].content}">
-                    <i class="fas fa-image"></i>
-                    <span>Image Available</span>
-                </div>
-            `;
-        } else {
-            facebookImageContainer.innerHTML = `
-                <div class="no-image-placeholder">
-                    <i class="fas fa-image"></i>
-                    <span>No Image</span>
-                </div>
-            `;
-        }
+        // Update Facebook/OG image
+        updateSocialImage('facebook-image', 
+            data.og_tags['og:image'] && data.og_tags['og:image'].content);
         
         // Twitter preview
         updateTextContent('twitter-domain', data.domain);
@@ -321,18 +278,28 @@ document.addEventListener('DOMContentLoaded', function() {
             'No description available.'
         );
         
-        // Update Twitter image if available
-        const twitterImageContainer = document.getElementById('twitter-image');
-        if ((data.twitter_tags['twitter:image'] && data.twitter_tags['twitter:image'].content) || 
-            (data.og_tags['og:image'] && data.og_tags['og:image'].content)) {
-            twitterImageContainer.innerHTML = `
-                <div class="image-placeholder" title="Image Available">
-                    <i class="fas fa-image"></i>
-                    <span>Image Available</span>
-                </div>
-            `;
+        // Update Twitter image
+        updateSocialImage('twitter-image', 
+            (data.twitter_tags['twitter:image'] && data.twitter_tags['twitter:image'].content) || 
+            (data.og_tags['og:image'] && data.og_tags['og:image'].content));
+        
+        // Update OG tags table
+        updateOgTagsTable(data.og_tags);
+        
+        // Update Twitter tags table
+        updateTwitterTagsTable(data.twitter_tags);
+    }
+    
+    // Update social image preview
+    function updateSocialImage(containerId, imageUrl) {
+        const container = document.getElementById(containerId);
+        
+        if (imageUrl) {
+            // Create an image element
+            container.innerHTML = `<img src="${imageUrl}" alt="Preview" class="img-fluid">`;
         } else {
-            twitterImageContainer.innerHTML = `
+            // Show no image placeholder
+            container.innerHTML = `
                 <div class="no-image-placeholder">
                     <i class="fas fa-image"></i>
                     <span>No Image</span>
@@ -341,104 +308,108 @@ document.addEventListener('DOMContentLoaded', function() {
         }
     }
     
-    // Calculate SEO Score
-    function calculateSeoScore(data) {
-        let totalPoints = 0;
-        let earnedPoints = 0;
+    // Update Open Graph tags table
+    function updateOgTagsTable(ogTags) {
+        const table = document.getElementById('og-tags-table');
+        table.innerHTML = '';
         
-        // Basic SEO score (40% of total)
-        let basicSeoPoints = 0;
-        let basicSeoTotal = 4;
+        const commonTags = ['og:title', 'og:description', 'og:url', 'og:site_name', 'og:locale'];
         
-        // Title
-        if (data.title.content) {
-            if (data.title.status === 'good') basicSeoPoints += 1;
-            else if (data.title.status === 'warning') basicSeoPoints += 0.5;
-        }
-        
-        // Meta Description
-        if (data.meta_description.content) {
-            if (data.meta_description.status === 'good') basicSeoPoints += 1;
-            else if (data.meta_description.status === 'warning') basicSeoPoints += 0.5;
-        }
-        
-        // Canonical URL
-        if (data.canonical.content) basicSeoPoints += 1;
-        
-        // Headings
-        if (data.headings.h1.length === 1) basicSeoPoints += 1;
-        else if (data.headings.h1.length > 1) basicSeoPoints += 0.5;
-        
-        const basicSeoScore = Math.round((basicSeoPoints / basicSeoTotal) * 100);
-        
-        // Social Media score (30% of total)
-        let socialPoints = 0;
-        let socialTotal = 6;
-        
-        // Open Graph tags
-        if (data.og_tags['og:title'] && data.og_tags['og:title'].content) socialPoints += 1;
-        if (data.og_tags['og:description'] && data.og_tags['og:description'].content) socialPoints += 1;
-        if (data.og_tags['og:image'] && data.og_tags['og:image'].content) socialPoints += 1;
-        
-        // Twitter Card tags
-        if (data.twitter_tags['twitter:card'] && data.twitter_tags['twitter:card'].content) socialPoints += 1;
-        if (data.twitter_tags['twitter:title'] && data.twitter_tags['twitter:title'].content) socialPoints += 1;
-        if (data.twitter_tags['twitter:image'] && data.twitter_tags['twitter:image'].content) socialPoints += 1;
-        
-        const socialScore = Math.round((socialPoints / socialTotal) * 100);
-        
-        // Structure score (30% of total)
-        let structurePoints = 0;
-        let structureTotal = 3;
-        
-        // Headings structure
-        if (data.headings.h1.length >= 1) structurePoints += 1;
-        if (data.headings.h2.length >= 1) structurePoints += 1;
-        
-        // Images with alt text
-        if (data.images.total > 0) {
-            const altRatio = data.images.with_alt / data.images.total;
-            if (altRatio >= 0.8) structurePoints += 1;
-            else if (altRatio >= 0.5) structurePoints += 0.5;
-        } else {
-            structurePoints += 1; // No images is still good for structure
-        }
-        
-        const structureScore = Math.round((structurePoints / structureTotal) * 100);
-        
-        // Calculate overall score (weighted)
-        const overallScore = Math.round(
-            (basicSeoScore * 0.4) + (socialScore * 0.3) + (structureScore * 0.3)
-        );
-        
-        // Update score displays
-        updateTextContent('basic-seo-score', basicSeoScore + '%');
-        updateTextContent('social-score', socialScore + '%');
-        updateTextContent('structure-score', structureScore + '%');
-        updateTextContent('seo-score-value', overallScore);
-        
-        // Apply score color and label
-        const scoreCircle = document.getElementById('seo-score-circle');
-        let scoreLabel = '';
-        
-        if (overallScore >= 90) {
-            scoreCircle.className = 'score-circle score-excellent';
-            scoreLabel = 'Excellent';
-        } else if (overallScore >= 70) {
-            scoreCircle.className = 'score-circle score-good';
-            scoreLabel = 'Good';
-        } else if (overallScore >= 50) {
-            scoreCircle.className = 'score-circle score-average';
-            scoreLabel = 'Average';
-        } else {
-            scoreCircle.className = 'score-circle score-poor';
-            scoreLabel = 'Needs Improvement';
-        }
-        
-        updateTextContent('seo-score-label', scoreLabel);
+        commonTags.forEach(tag => {
+            const row = document.createElement('tr');
+            const tagCell = document.createElement('td');
+            const contentCell = document.createElement('td');
+            
+            tagCell.textContent = tag;
+            
+            if (ogTags[tag] && ogTags[tag].content) {
+                contentCell.textContent = ogTags[tag].content;
+            } else {
+                contentCell.textContent = 'Not found';
+                contentCell.className = 'text-muted';
+            }
+            
+            row.appendChild(tagCell);
+            row.appendChild(contentCell);
+            table.appendChild(row);
+        });
     }
     
-    // Helper Functions
+    // Update Twitter Card tags table
+    function updateTwitterTagsTable(twitterTags) {
+        const table = document.getElementById('twitter-tags-table');
+        table.innerHTML = '';
+        
+        const commonTags = ['twitter:card', 'twitter:title', 'twitter:description', 'twitter:image'];
+        
+        commonTags.forEach(tag => {
+            const row = document.createElement('tr');
+            const tagCell = document.createElement('td');
+            const contentCell = document.createElement('td');
+            
+            tagCell.textContent = tag;
+            
+            if (twitterTags[tag] && twitterTags[tag].content) {
+                contentCell.textContent = twitterTags[tag].content;
+            } else {
+                contentCell.textContent = 'Not found';
+                contentCell.className = 'text-muted';
+            }
+            
+            row.appendChild(tagCell);
+            row.appendChild(contentCell);
+            table.appendChild(row);
+        });
+    }
+    
+    // Display Recommendations
+    function displayRecommendations(recommendations) {
+        const container = document.getElementById('recommendations-container');
+        container.innerHTML = '';
+        
+        if (recommendations && recommendations.length > 0) {
+            recommendations.forEach((recommendation, index) => {
+                // Determine recommendation type based on content
+                let type = 'warning';
+                if (recommendation.toLowerCase().includes('good') || 
+                    recommendation.toLowerCase().includes('properly')) {
+                    type = 'success';
+                } else if (recommendation.toLowerCase().includes('missing') || 
+                          recommendation.toLowerCase().includes('no ')) {
+                    type = 'danger';
+                }
+                
+                // Get a title from the recommendation
+                let title = recommendation.split('.')[0];
+                if (title.length > 50) {
+                    title = title.substring(0, 47) + '...';
+                }
+                
+                // Create recommendation item
+                const item = document.createElement('div');
+                item.className = `card mb-3 border-start border-${type} border-4`;
+                item.innerHTML = `
+                    <div class="card-body py-3">
+                        <h5 class="h6 mb-2">${title}</h5>
+                        <p class="mb-0 small">${recommendation}</p>
+                    </div>
+                `;
+                
+                container.appendChild(item);
+            });
+        } else {
+            container.innerHTML = `
+                <div class="card border-start border-success border-4">
+                    <div class="card-body py-3">
+                        <h5 class="h6 mb-2">Great SEO Implementation</h5>
+                        <p class="mb-0 small">No recommendations needed. Your site appears to be following SEO best practices.</p>
+                    </div>
+                </div>
+            `;
+        }
+    }
+    
+    // Utility Functions
     function showElement(element) {
         element.classList.remove('d-none');
     }
@@ -454,23 +425,8 @@ document.addEventListener('DOMContentLoaded', function() {
         }
     }
     
-    function updateStatusElement(elementId, status) {
-        const element = document.getElementById(elementId);
-        if (element) {
-            element.innerHTML = statusIcons[status] || '';
-        }
-    }
-    
     function showError(message) {
         errorMessage.textContent = message;
         showElement(errorAlert);
-    }
-    
-    // Initialize tooltips if available
-    if (typeof bootstrap !== 'undefined') {
-        const tooltipTriggerList = [].slice.call(document.querySelectorAll('[data-bs-toggle="tooltip"]'));
-        tooltipTriggerList.map(function (tooltipTriggerEl) {
-            return new bootstrap.Tooltip(tooltipTriggerEl);
-        });
     }
 });

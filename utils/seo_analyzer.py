@@ -41,6 +41,7 @@ def analyze_url(url):
         'domain': parsed_url.netloc,
         'title': {},
         'meta_description': {},
+        'meta_keywords': {},
         'og_tags': {},
         'twitter_tags': {},
         'canonical': {},
@@ -103,6 +104,21 @@ def analyze_url(url):
             'status': 'error'
         }
         results['recommendations'].append('Add a meta description to your page')
+        
+    # Extract meta keywords
+    meta_keywords = soup.find('meta', attrs={'name': 'keywords'})
+    if meta_keywords and meta_keywords.get('content'):
+        keywords_text = meta_keywords['content'].strip()
+        results['meta_keywords'] = {
+            'content': keywords_text,
+            'status': 'good' 
+        }
+    else:
+        results['meta_keywords'] = {
+            'content': None,
+            'status': 'warning'  # Not as critical as other meta tags
+        }
+        results['recommendations'].append('Consider adding meta keywords for better visibility in some search engines')
     
     # Extract Open Graph tags
     og_tags = {
@@ -111,13 +127,20 @@ def analyze_url(url):
         'og:image': soup.find('meta', property='og:image'),
         'og:url': soup.find('meta', property='og:url'),
         'og:type': soup.find('meta', property='og:type'),
-        'og:site_name': soup.find('meta', property='og:site_name')
+        'og:site_name': soup.find('meta', property='og:site_name'),
+        'og:locale': soup.find('meta', property='og:locale')
     }
     
     for tag_name, tag in og_tags.items():
         if tag and tag.get('content'):
+            content = tag['content']
+            
+            # Make image URLs absolute if needed
+            if tag_name == 'og:image' and not (content.startswith('http://') or content.startswith('https://')):
+                content = urljoin(url, content)
+                
             results['og_tags'][tag_name] = {
-                'content': tag['content'],
+                'content': content,
                 'status': 'good'
             }
         else:
@@ -144,8 +167,14 @@ def analyze_url(url):
     
     for tag_name, tag in twitter_tags.items():
         if tag and tag.get('content'):
+            content = tag['content']
+            
+            # Make image URLs absolute if needed
+            if tag_name == 'twitter:image' and not (content.startswith('http://') or content.startswith('https://')):
+                content = urljoin(url, content)
+                
             results['twitter_tags'][tag_name] = {
-                'content': tag['content'],
+                'content': content,
                 'status': 'good'
             }
         else:
