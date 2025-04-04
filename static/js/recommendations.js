@@ -1,10 +1,9 @@
-// Update the recommendations display function
+// Recommendations handling for SEO Meta Tag Analyzer
+
 function displayRecommendations(recommendations) {
-    // Update the main recommendations container
-    updateRecommendationsContainer('recommendations-container', recommendations);
-    
-    // Update the tab recommendations container if it exists
-    updateRecommendationsContainer('tab-recommendations-container', recommendations);
+    /* Update both recommendation containers */
+    updateRecommendationsContainer("recommendations-container", recommendations);
+    updateRecommendationsContainer("tab-recommendations-container", recommendations);
 }
 
 function updateRecommendationsContainer(containerId, recommendations) {
@@ -16,27 +15,39 @@ function updateRecommendationsContainer(containerId, recommendations) {
     
     container.innerHTML = '';
     
-    if (!recommendations || recommendations.length === 0) {
-        container.innerHTML = '<p class="text-muted">No recommendations available.</p>';
-        return;
-    }
-    
-    recommendations.forEach(recommendation => {
-        const severity = recommendation.severity || 'warning';
-        const statusClass = severity === 'critical' ? 'danger' : (severity === 'warning' ? 'warning' : 'success');
-        
-        const recommendationItem = document.createElement('div');
-        recommendationItem.className = `card mb-3 border-${statusClass}-custom`;
-        recommendationItem.innerHTML = `
-            <div class="card-body">
-                <div class="d-flex align-items-center mb-2">
-                    <h4 class="h6 mb-0">${recommendation.title}</h4>
-                    <span class="ms-auto badge bg-${statusClass}">${severity.toUpperCase()}</span>
+    if (recommendations && recommendations.length > 0) {
+        recommendations.forEach((recommendation, index) => {
+            // Determine recommendation type based on content
+            let recommendationType = 'warning';
+            let borderClass = 'border-warning-custom';
+            let iconClass = 'fa-exclamation-triangle text-warning';
+            
+            if (recommendation.includes('missing') || recommendation.includes('error') || recommendation.includes('critical')) {
+                recommendationType = 'error';
+                borderClass = 'border-danger-custom';
+                iconClass = 'fa-times-circle text-danger';
+            } else if (recommendation.includes('good') || recommendation.includes('excellent') || recommendation.includes('optimized')) {
+                recommendationType = 'success';
+                borderClass = 'border-success-custom';
+                iconClass = 'fa-check-circle text-success';
+            }
+            
+            // Create recommendation card
+            const card = document.createElement('div');
+            card.className = `card mb-2 ${borderClass}`;
+            card.innerHTML = `
+                <div class="card-body py-2 px-3">
+                    <div class="d-flex align-items-center">
+                        <i class="fas ${iconClass} me-2"></i>
+                        <span class="small">${recommendation}</span>
+                    </div>
                 </div>
-                <p class="mb-0 small">${recommendation.description}</p>
-            </div>
-        `;
-        
-        container.appendChild(recommendationItem);
-    });
+            `;
+            
+            container.appendChild(card);
+        });
+    } else {
+        // No recommendations
+        container.innerHTML = '<div class="text-center text-muted py-3">No recommendations available.</div>';
+    }
 }

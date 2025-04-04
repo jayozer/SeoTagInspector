@@ -432,9 +432,9 @@ document.addEventListener('DOMContentLoaded', function() {
     }
 
     function updateRecommendationsContainer(containerId, recommendations) {
-        const container = document.getElementById('recommendations-container');
+        const container = document.getElementById(containerId);
         if (!container) {
-            console.warn("Recommendations container not found");
+            console.warn(`Recommendations container '${containerId}' not found`);
             return;
         }
         

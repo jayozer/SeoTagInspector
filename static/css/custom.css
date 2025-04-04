@@ -21,6 +21,17 @@ body {
 }
 
 /* Removed the /100 from score circle as requested */
+/* Original was:
+.score-circle:after {
+    content: '/100';
+    display: block;
+    position: absolute;
+    bottom: -1.5rem;
+    font-size: 0.875rem;
+    color: #6c757d;
+    font-weight: normal;
+}
+*/
 
 .score-excellent {
     border-color: #28a745;
@@ -330,4 +341,34 @@ body {
 
 .score-name {
     color: var(--bs-secondary);
+}
+
+/* Improved spacing for recommendations */
+.recommendations-container .card {
+    margin-bottom: 0.75rem;
+}
+
+/* Ensure tables for OG and Twitter tags are centered and consistent */
+.table-og-tags, .table-twitter-tags {
+    width: 100%;
+    margin: 0 auto;
+}
+
+/* Fix responsive header structure */
+@media (max-width: 576px) {
+    .h1, h1 {
+        font-size: 1.75rem;
+    }
+    .h2, h2 {
+        font-size: 1.5rem;
+    }
+    .h5, h5 {
+        font-size: 1.1rem;
+    }
+}
+
+/* Improve tag tables appearance */
+.tag-table-wrapper {
+    margin: 0 auto;
+    overflow-x: auto;
 }
