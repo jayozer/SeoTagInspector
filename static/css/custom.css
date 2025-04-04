@@ -1,3 +1,20 @@
+/* Google Preview styling */
+.google-preview-box {
+    border-radius: .375rem;
+    padding: 1rem;
+    font-family: Arial, sans-serif;
+    max-width: 100%;
+    background-color: #f0f2f5;
+    word-wrap: break-word;
+    overflow-wrap: break-word;
+}
+
+/* Preview container - ensures responsive behavior */
+.preview-container {
+    width: 100%;
+    overflow-x: hidden;
+    margin-bottom: 1rem;
+}
 /* Custom styles for SEO Meta Tag Analyzer */
 
 /* Main styles */
@@ -42,13 +59,12 @@ body {
     color: #dc3545;
 }
 
-/* Google Preview styling */
-.google-preview-box {
-    border-radius: .375rem;
-    padding: 1rem;
-    font-family: Arial, sans-serif;
-    max-width: 600px;
-    background-color: #f0f2f5;
+
+/* Preview container - ensures responsive behavior */
+.preview-container {
+    width: 100%;
+    overflow-x: hidden;
+    margin-bottom: 1rem;
 }
 
 .google-title {
@@ -330,4 +346,41 @@ body {
 
 .score-name {
     color: var(--bs-secondary);
+}
+/* Fix for cut-off tables in preview sections */
+.table-responsive {
+    overflow-x: auto;
+    margin: 0 auto;
+    width: 100%;
+}
+
+.table {
+    width: 100%;
+    table-layout: fixed;
+}
+
+.table th, .table td {
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+}
+
+/* On mobile, allow table cells to wrap contents */
+@media (max-width: 767.98px) {
+    .table th, .table td {
+        white-space: normal;
+        word-break: break-word;
+    }
+}
+
+/* Allow preview boxes to adjust to smaller screens */
+.preview-container {
+    width: 100%;
+    overflow-x: auto;
+}
+
+/* Ensure all containers have proper margin and padding */
+.container, .container-fluid {
+    padding-right: 15px;
+    padding-left: 15px;
 }
