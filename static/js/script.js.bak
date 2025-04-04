@@ -193,7 +193,7 @@ document.addEventListener('DOMContentLoaded', function() {
     }
     
     // Update SEO Score Section
-    function updateSeoScoreSection(data, categoryScores) {
+    function updateSeoScoreSection(data) {
         // Calculate totals
         let passedChecks = 0;
         let warnings = 0;
@@ -258,185 +258,10 @@ document.addEventListener('DOMContentLoaded', function() {
         const scoreValueElement = document.getElementById('seo-score-value');
         const scoreLabel = document.getElementById('seo-score-label');
         const basicSeoScore = document.getElementById('basic-seo-score');
-        const socialScore = document.getElementById('social-score');
-        const structureScore = document.getElementById('structure-score');
-        const contentScore = document.getElementById('content-score');
         
         if (scoreValueElement) scoreValueElement.textContent = score;
         if (scoreLabel) scoreLabel.textContent = score >= 70 ? 'Good' : score >= 50 ? 'Average' : 'Poor';
-        
-        // Update category scores
-        if (basicSeoScore) basicSeoScore.textContent = categoryScores.basicSeo.score;
-        const visualBasicSeoScore = document.getElementById("visual-basic-seo-score");
-        const visualSocialScore = document.getElementById("visual-social-score");
-        const visualStructureScore = document.getElementById("visual-structure-score");
-        const visualContentScore = document.getElementById("visual-content-score");
-        
-        if (visualBasicSeoScore) visualBasicSeoScore.textContent = categoryScores.basicSeo.score;
-        if (visualSocialScore) visualSocialScore.textContent = categoryScores.social.score;
-        if (visualStructureScore) visualStructureScore.textContent = categoryScores.structure.score;
-        if (visualContentScore) visualContentScore.textContent = categoryScores.content.score;
-        if (socialScore) socialScore.textContent = categoryScores.social.score;
-        if (structureScore) structureScore.textContent = categoryScores.structure.score;
-        if (contentScore) contentScore.textContent = categoryScores.content.score;
-    }
-    
-    // Update Category Summaries
-    function updateCategorySummaries(data, categoryScores) {
-        const categorySummaryContainer = document.getElementById('category-summaries');
-        if (!categorySummaryContainer) return;
-        
-        // Clear the container
-        categorySummaryContainer.innerHTML = '';
-        
-        // Create the category summary cards
-        const categories = [
-            {
-                id: 'basicSeo',
-                title: 'Basic SEO',
-                icon: 'search',
-                description: 'Core meta tags that impact search rankings',
-                color: 'primary',
-                items: [
-                    { name: 'Title', status: data.title.status },
-                    { name: 'Meta Description', status: data.meta_description.status },
-                    { name: 'Canonical URL', status: data.canonical.status },
-                    { name: 'Meta Keywords', status: data.meta_keywords.status },
-                    { name: 'Robots Meta Tag', status: data.robots.status }
-                ]
-            },
-            {
-                id: 'social',
-                title: 'Social Media',
-                icon: 'share-alt',
-                description: 'Open Graph and Twitter Card tags for social sharing',
-                color: 'info',
-                items: [
-                    { name: 'OG Title', status: data.og_tags['og:title']?.status || 'error' },
-                    { name: 'OG Description', status: data.og_tags['og:description']?.status || 'error' },
-                    { name: 'OG Image', status: data.og_tags['og:image']?.status || 'error' },
-                    { name: 'Twitter Card', status: data.twitter_tags['twitter:card']?.status || 'error' },
-                    { name: 'Twitter Title', status: data.twitter_tags['twitter:title']?.status || 'error' }
-                ]
-            },
-            {
-                id: 'structure',
-                title: 'Page Structure',
-                icon: 'sitemap',
-                description: 'Headings and page organization',
-                color: 'success',
-                items: [
-                    { 
-                        name: 'H1 Heading', 
-                        status: data.headings.h1.length === 1 ? 'good' : 
-                                data.headings.h1.length === 0 ? 'error' : 'warning' 
-                    },
-                    { 
-                        name: 'H2 Headings', 
-                        status: data.headings.h2.length > 0 ? 'good' : 'warning' 
-                    },
-                    { 
-                        name: 'H3 Headings', 
-                        status: data.headings.h3.length > 0 ? 'good' : 'warning' 
-                    },
-                    { 
-                        name: 'Heading Structure', 
-                        status: data.headings.h1.length === 1 && data.headings.h2.length > 0 ? 'good' : 'warning' 
-                    }
-                ]
-            },
-            {
-                id: 'content',
-                title: 'Page Content',
-                icon: 'file-alt',
-                description: 'Images and content accessibility',
-                color: 'warning',
-                items: [
-                    { 
-                        name: 'Images with Alt Text', 
-                        status: data.images.with_alt > 0 ? 'good' : 'warning',
-                        details: `${data.images.with_alt} of ${data.images.total} images have alt text`
-                    },
-                    { 
-                        name: 'Images Missing Alt Text', 
-                        status: data.images.without_alt === 0 ? 'good' : 'warning',
-                        details: `${data.images.without_alt} of ${data.images.total} images missing alt text`
-                    }
-                ]
-            }
-        ];
-        
-        // Create a row for the cards
-        const row = document.createElement('div');
-        row.className = 'row';
-        
-        // Add cards to the row
-        categories.forEach(category => {
-            const categoryScore = categoryScores[category.id];
-            const scoreClass = categoryScore.score >= 90 ? 'score-excellent' : 
-                              categoryScore.score >= 70 ? 'score-good' : 
-                              categoryScore.score >= 50 ? 'score-average' : 'score-poor';
-            
-            const card = document.createElement('div');
-            card.className = 'col-lg-3 col-md-6 mb-4';
-            card.innerHTML = `
-                <div class="card category-summary-card h-100 border-${category.color}">
-                    <div class="card-body text-center p-4">
-                        <div class="icon-container bg-${category.color}-subtle text-${category.color} mb-3">
-                            <i class="fas fa-${category.icon}"></i>
-                        </div>
-                        <h3 class="h5 mb-2">${category.title}</h3>
-                        <div class="category-score-circle ${scoreClass} mb-2">
-                            ${categoryScore.score}
-                        </div>
-                        <p class="text-muted small mb-3">${category.description}</p>
-                        
-                        <div class="metrics-row border-top pt-3">
-                            <div class="metric-item">
-                                <div class="metric-value text-success">${categoryScore.passed}</div>
-                                <div class="metric-label">Passed</div>
-                            </div>
-                            <div class="metric-item">
-                                <div class="metric-value text-warning">${categoryScore.warnings}</div>
-                                <div class="metric-label">Warnings</div>
-                            </div>
-                            <div class="metric-item">
-                                <div class="metric-value text-danger">${categoryScore.failed}</div>
-                                <div class="metric-label">Failed</div>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="card-footer bg-transparent p-0">
-                        <button class="btn btn-link text-decoration-none w-100 text-${category.color}" type="button" data-bs-toggle="collapse" data-bs-target="#${category.id}Details">
-                            View Details <i class="fas fa-chevron-down ms-1"></i>
-                        </button>
-                    </div>
-                    <div class="collapse" id="${category.id}Details">
-                        <div class="card-body border-top pt-3">
-                            <div class="category-checks">
-                                ${category.items.map(item => `
-                                    <div class="category-check-item ${item.status}">
-                                        <div class="d-flex align-items-center">
-                                            <i class="fas fa-${item.status === 'good' ? 'check-circle text-success' : 
-                                                              item.status === 'warning' ? 'exclamation-triangle text-warning' : 
-                                                              'times-circle text-danger'} me-2"></i>
-                                            <div>
-                                                <div class="fw-bold">${item.name}</div>
-                                                ${item.details ? `<div class="small text-muted">${item.details}</div>` : ''}
-                                            </div>
-                                        </div>
-                                    </div>
-                                `).join('')}
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            `;
-            
-            row.appendChild(card);
-        });
-        
-        categorySummaryContainer.appendChild(row);
+        if (basicSeoScore) basicSeoScore.textContent = score;
     }
     
     // Update Google Preview
@@ -656,30 +481,29 @@ document.addEventListener('DOMContentLoaded', function() {
         
         table.innerHTML = '';
         
-        if (ogTags && Object.keys(ogTags).length > 0) {
-            for (const [tagName, tagData] of Object.entries(ogTags)) {
-                const row = document.createElement('tr');
-                const statusIcon = tagData.status === 'good' ? 
-                    '<i class="fas fa-check-circle text-success"></i>' : 
-                    '<i class="fas fa-exclamation-triangle text-warning"></i>';
-                
-                row.innerHTML = `
-                    <td>${tagName} ${statusIcon}</td>
-                    <td>${tagData.content || '<span class="text-muted">Not set</span>'}</td>
-                `;
-                
-                table.appendChild(row);
+        const commonTags = ['og:title', 'og:description', 'og:url', 'og:site_name', 'og:locale', 'og:image'];
+        
+        commonTags.forEach(tag => {
+            const row = document.createElement('tr');
+            const tagCell = document.createElement('td');
+            const contentCell = document.createElement('td');
+            
+            tagCell.textContent = tag;
+            
+            if (ogTags[tag] && ogTags[tag].content) {
+                contentCell.textContent = ogTags[tag].content;
+            } else {
+                contentCell.textContent = 'Not found';
+                contentCell.className = 'text-muted';
             }
-        } else {
-            table.innerHTML = `
-                <tr>
-                    <td colspan="2" class="text-center text-muted">No Open Graph tags found</td>
-                </tr>
-            `;
-        }
+            
+            row.appendChild(tagCell);
+            row.appendChild(contentCell);
+            table.appendChild(row);
+        });
     }
     
-    // Update Twitter tags table
+    // Update Twitter Card tags table
     function updateTwitterTagsTable(twitterTags) {
         const table = document.getElementById('twitter-tags-table');
         if (!table) {
@@ -689,29 +513,29 @@ document.addEventListener('DOMContentLoaded', function() {
         
         table.innerHTML = '';
         
-        if (twitterTags && Object.keys(twitterTags).length > 0) {
-            for (const [tagName, tagData] of Object.entries(twitterTags)) {
-                const row = document.createElement('tr');
-                const statusIcon = tagData.status === 'good' ? 
-                    '<i class="fas fa-check-circle text-success"></i>' : 
-                    '<i class="fas fa-exclamation-triangle text-warning"></i>';
-                
-                row.innerHTML = `
-                    <td>${tagName} ${statusIcon}</td>
-                    <td>${tagData.content || '<span class="text-muted">Not set</span>'}</td>
-                `;
-                
-                table.appendChild(row);
+        const commonTags = ['twitter:card', 'twitter:title', 'twitter:description', 'twitter:image'];
+        
+        commonTags.forEach(tag => {
+            const row = document.createElement('tr');
+            const tagCell = document.createElement('td');
+            const contentCell = document.createElement('td');
+            
+            tagCell.textContent = tag;
+            
+            if (twitterTags[tag] && twitterTags[tag].content) {
+                contentCell.textContent = twitterTags[tag].content;
+            } else {
+                contentCell.textContent = 'Not found';
+                contentCell.className = 'text-muted';
             }
-        } else {
-            table.innerHTML = `
-                <tr>
-                    <td colspan="2" class="text-center text-muted">No Twitter Card tags found</td>
-                </tr>
-            `;
-        }
+            
+            row.appendChild(tagCell);
+            row.appendChild(contentCell);
+            table.appendChild(row);
+        });
     }
     
+    // Display Recommendations
     function displayRecommendations(recommendations) {
         /* Function moved to external file. We call the implementation from there */
         updateRecommendationsContainer("recommendations-container", recommendations);
@@ -773,9 +597,10 @@ document.addEventListener('DOMContentLoaded', function() {
         if (element) element.textContent = content;
     }
     
-    // Helper function to show error message
+    // Display error message
     function showError(message) {
         if (errorMessage) errorMessage.textContent = message;
         showElement(errorAlert);
+        hideElement(loadingIndicator);
     }
 });

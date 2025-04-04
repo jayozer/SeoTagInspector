@@ -114,9 +114,30 @@
                     </div>
                 </div>
             </div>
+            <!-- Category Summaries Section --> 
+            <div class="mb-4"> 
+                <h2 class="h5 mb-3">SEO Categories Overview</h2> 
+                <div id="category-summaries"> 
+                    <!-- Category summary cards will be inserted here by JavaScript --> 
+                </div> 
+            </div>
+            
+            <!-- Category Summaries Section -->
+            <div class="mb-4">
+                <h2 class="h5 mb-3">SEO Categories Overview</h2>
+                <div id="category-summaries">
+                    <!-- Category summary cards will be inserted here by JavaScript -->
+                </div>
+            </div>
             
             <!-- Preview Navigation -->
             <ul class="nav nav-tabs mb-3" id="previewTabs" role="tablist">
+                <li class="nav-item" role="presentation"> 
+                    <button class="nav-link" id="visual-summary-tab" data-bs-toggle="tab" 
+                            data-bs-target="#visual-summary-pane" type="button" role="tab"> 
+                        <i class="fas fa-chart-bar me-2"></i>Visual Summary 
+                    </button> 
+                </li>
                 <li class="nav-item" role="presentation">
                     <button class="nav-link active" id="google-preview-tab" data-bs-toggle="tab" 
                             data-bs-target="#google-preview-pane" type="button" role="tab">
@@ -435,6 +456,77 @@
                     </div>
                 </div>
                 
+                <!-- Visual Summary Tab --> 
+                <div class="tab-pane fade" id="visual-summary-pane" role="tabpanel" aria-labelledby="visual-summary-tab"> 
+                    <div class="row"> 
+                        <div class="col-md-12 mb-4"> 
+                            <div class="card h-100 shadow-sm"> 
+                                <div class="card-header bg-transparent"> 
+                                    <h5 class="mb-0"> 
+                                        <i class="fas fa-chart-pie me-2"></i> 
+                                        Visual SEO Summary 
+                                    </h5> 
+                                </div> 
+                                <div class="card-body"> 
+                                    <div class="row mb-4"> 
+                                        <div class="col-md-6 col-lg-3 mb-3"> 
+                                            <div class="card h-100 border-primary"> 
+                                                <div class="card-body text-center"> 
+                                                    <h5 class="card-title">Basic SEO</h5> 
+                                                    <div class="category-score-circle mb-2"> 
+                                                        <span id="visual-basic-seo-score">--</span> 
+                                                    </div> 
+                                                    <p class="text-muted small">Core meta tags and basic SEO elements</p> 
+                                                </div> 
+                                            </div> 
+                                        </div> 
+                                        <div class="col-md-6 col-lg-3 mb-3"> 
+                                            <div class="card h-100 border-info"> 
+                                                <div class="card-body text-center"> 
+                                                    <h5 class="card-title">Social Media</h5> 
+                                                    <div class="category-score-circle mb-2"> 
+                                                        <span id="visual-social-score">--</span> 
+                                                    </div> 
+                                                    <p class="text-muted small">Open Graph and Twitter Card tags</p> 
+                                                </div> 
+                                            </div> 
+                                        </div> 
+                                        <div class="col-md-6 col-lg-3 mb-3"> 
+                                            <div class="card h-100 border-success"> 
+                                                <div class="card-body text-center"> 
+                                                    <h5 class="card-title">Structure</h5> 
+                                                    <div class="category-score-circle mb-2"> 
+                                                        <span id="visual-structure-score">--</span> 
+                                                    </div> 
+                                                    <p class="text-muted small">Heading hierarchy and page structure</p> 
+                                                </div> 
+                                            </div> 
+                                        </div> 
+                                        <div class="col-md-6 col-lg-3 mb-3"> 
+                                            <div class="card h-100 border-warning"> 
+                                                <div class="card-body text-center"> 
+                                                    <h5 class="card-title">Content</h5> 
+                                                    <div class="category-score-circle mb-2"> 
+                                                        <span id="visual-content-score">--</span> 
+                                                    </div> 
+                                                    <p class="text-muted small">Image alt tags and content quality</p> 
+                                                </div> 
+                                            </div> 
+                                        </div> 
+                                    </div> 
+                                    <div class="row"> 
+                                        <div class="col-md-12"> 
+                                            <h5 class="mb-3">Top Recommendations</h5> 
+                                            <div id="tab-recommendations-container"> 
+                                                <!-- Top recommendations will be inserted here by JavaScript --> 
+                                            </div> 
+                                        </div> 
+                                    </div> 
+                                </div> 
+                            </div> 
+                        </div> 
+                    </div> 
+                </div>
                 <!-- Previews Tab -->
                 <div class="tab-pane fade" id="social-preview-pane" role="tabpanel" aria-labelledby="social-preview-tab">
                     <div class="row">
