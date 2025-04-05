@@ -5,13 +5,13 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>SEO Meta Tag Analyzer</title>
     <meta name="description" content="Analyze and visualize SEO meta tags for any website - improve your search engine optimization with our interactive analyzer.">
-    
+
     <!-- Bootstrap 5 (Replit Dark Theme) -->
     <link rel="stylesheet" href="https://cdn.replit.com/agent/bootstrap-agent-dark-theme.min.css">
-    
+
     <!-- Font Awesome -->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
-    
+
     <!-- Custom CSS -->
     <link rel="stylesheet" href="{{ url_for('static', filename='css/custom.css') }}">
 </head>
@@ -23,7 +23,7 @@
             <h1 class="mb-1">SEO Meta Tag Analyzer</h1>
             <p class="text-muted">Analyze and visualize SEO tags to improve your website's optimization</p>
         </header>
-        
+
         <!-- URL Input Section -->
         <section class="mb-4">
             <div class="card shadow-sm">
@@ -45,7 +45,7 @@
                 </div>
             </div>
         </section>
-        
+
         <!-- Loading Indicator -->
         <div id="loading-indicator" class="text-center my-5 d-none">
             <div class="spinner-border text-primary" role="status">
@@ -53,7 +53,7 @@
             </div>
             <p class="mt-3">Analyzing website meta tags...</p>
         </div>
-        
+
         <!-- Results Section (Initially Hidden) -->
         <section id="results-section" class="d-none">
             <!-- SEO Score Section -->
@@ -121,7 +121,7 @@
                     <!-- Category summary cards will be inserted here by JavaScript --> 
                 </div> 
             </div>
-            
+
             <!-- Category Summaries Section -->
             <div class="mb-4">
                 <h2 class="h5 mb-3">SEO Categories Overview</h2>
@@ -129,7 +129,7 @@
                     <!-- Category summary cards will be inserted here by JavaScript -->
                 </div>
             </div>
-            
+
             <!-- Preview Navigation -->
             <ul class="nav nav-tabs mb-3" id="previewTabs" role="tablist">
                 <li class="nav-item" role="presentation"> 
@@ -151,7 +151,7 @@
                     </button>
                 </li>
             </ul>
-            
+
             <!-- Tab Content -->
             <div class="tab-content" id="resultTabsContent">
                 <!-- Google Preview Tab -->
@@ -177,7 +177,7 @@
                                             <div id="title-content" class="tag-content mt-2"></div>
                                             <div id="title-length" class="tag-meta small text-muted mt-1"></div>
                                         </div>
-                                        
+
                                         <!-- Meta Description -->
                                         <div class="seo-tag-item mb-3">
                                             <div class="tag-label d-flex justify-content-between">
@@ -186,92 +186,8 @@
                                             </div>
                                             <div id="description-content" class="tag-content mt-2"></div>
                                             <div id="description-length" class="tag-meta small text-muted mt-1"></div>
-            <!-- Detailed SEO Checks Section -->
-            <div class="card shadow-sm mb-4">
-                <div class="card-header bg-transparent">
-                    <h5 class="mb-0">
-                        <i class="fas fa-check-square me-2"></i>
-                        Detailed SEO Checks
-                    </h5>
-                </div>
-                <div class="card-body">
-                    <div id="seo-checks-container">
-                        <p class="text-muted">SEO checks will be displayed here...</p>
-                    </div>
-                </div>
-            </div>
-
-            <!-- Tag Tables Section -->
-            <div class="card shadow-sm mb-4">
-                <div class="card-header bg-transparent">
-                    <h5 class="mb-0">
-                        <i class="fas fa-tags me-2"></i>
-                        Social Media Tags
-                    </h5>
-                </div>
-                <div class="card-body">
-                    <!-- Open Graph Tags -->
-                    <h6 class="mb-3">
-                        <i class="fab fa-facebook me-2"></i>
-                        Open Graph Tags
-                    </h6>
-                    <div class="table-responsive mb-4">
-                        <table class="table table-sm">
-                            <thead>
-                                <tr>
-                                    <th style="width: 30%">Tag</th>
-                                    <th>Content</th>
-                                </tr>
-                            </thead>
-                            <tbody id="og-tags-table">
-                                <tr>
-                                    <td>No data available</td>
-                                    <td></td>
-                                </tr>
-                            </tbody>
-                        </table>
-                    </div>
-                    
-                    <!-- Twitter Card Tags -->
-                    <h6 class="mb-3">
-                        <i class="fab fa-twitter me-2"></i>
-                        Twitter Card Tags
-                    </h6>
-                    <div class="table-responsive">
-                        <table class="table table-sm">
-                            <thead>
-                                <tr>
-                                    <th style="width: 30%">Tag</th>
-                                    <th>Content</th>
-                                </tr>
-                            </thead>
-                            <tbody id="twitter-tags-table">
-                                <tr>
-                                    <td>No data available</td>
-                                    <td></td>
-                                </tr>
-                            </tbody>
-                        </table>
-                    </div>
-                </div>
-            </div>
-            
-            <!-- Recommendations Section -->
-            <div class="card shadow-sm mb-4">
-                <div class="card-header bg-transparent">
-                    <h5 class="mb-0">
-                        <i class="fas fa-lightbulb me-2"></i>
-                        Recommendations
-                    </h5>
-                </div>
-                <div class="card-body">
-                    <div id="recommendations-container">
-                        <p class="text-muted">Recommendations will be displayed here...</p>
-                    </div>
-                </div>
-            </div>
                                         </div>
-                                        
+
                                         <!-- Canonical URL -->
                                         <div class="seo-tag-item mb-3">
                                             <div class="tag-label d-flex justify-content-between">
@@ -280,7 +196,7 @@
                                             </div>
                                             <div id="canonical-content" class="tag-content mt-2"></div>
                                         </div>
-                                        
+
                                         <!-- Robots -->
                                         <div class="seo-tag-item">
                                             <div class="tag-label d-flex justify-content-between">
@@ -293,7 +209,7 @@
                                 </div>
                             </div>
                         </div>
-                        
+
                         <!-- Headings -->
                         <div class="col-md-6 mb-4">
                             <div class="card h-100 shadow-sm">
@@ -310,13 +226,13 @@
                                             <h6 class="mb-2">H1 Headings <span id="h1-count" class="badge bg-secondary ms-2">0</span></h6>
                                             <div id="h1-tags" class="tag-content"></div>
                                         </div>
-                                        
+
                                         <!-- H2 Headings -->
                                         <div class="mb-3">
                                             <h6 class="mb-2">H2 Headings <span id="h2-count" class="badge bg-secondary ms-2">0</span></h6>
                                             <div id="h2-tags" class="tag-content"></div>
                                         </div>
-                                        
+
                                         <!-- H3 Headings -->
                                         <div>
                                             <h6 class="mb-2">H3 Headings <span id="h3-count" class="badge bg-secondary ms-2">0</span></h6>
@@ -326,7 +242,7 @@
                                 </div>
                             </div>
                         </div>
-                        
+
                         <!-- Open Graph Tags -->
                         <div class="col-md-6 mb-4">
                             <div class="card h-100 shadow-sm">
@@ -346,7 +262,7 @@
                                             </div>
                                             <div id="og-title-content" class="tag-content mt-2"></div>
                                         </div>
-                                        
+
                                         <!-- og:description -->
                                         <div class="seo-tag-item mb-3">
                                             <div class="tag-label d-flex justify-content-between">
@@ -355,7 +271,7 @@
                                             </div>
                                             <div id="og-description-content" class="tag-content mt-2"></div>
                                         </div>
-                                        
+
                                         <!-- og:image -->
                                         <div class="seo-tag-item mb-3">
                                             <div class="tag-label d-flex justify-content-between">
@@ -364,7 +280,7 @@
                                             </div>
                                             <div id="og-image-content" class="tag-content mt-2"></div>
                                         </div>
-                                        
+
                                         <!-- og:url, og:type, og:site_name -->
                                         <div class="row">
                                             <div class="col-md-4 mb-3">
@@ -396,7 +312,7 @@
                                 </div>
                             </div>
                         </div>
-                        
+
                         <!-- Twitter Card Tags -->
                         <div class="col-md-6 mb-4">
                             <div class="card h-100 shadow-sm">
@@ -416,7 +332,7 @@
                                             </div>
                                             <div id="twitter-card-content" class="tag-content mt-2"></div>
                                         </div>
-                                        
+
                                         <!-- twitter:title -->
                                         <div class="seo-tag-item mb-3">
                                             <div class="tag-label d-flex justify-content-between">
@@ -425,7 +341,7 @@
                                             </div>
                                             <div id="twitter-title-content" class="tag-content mt-2"></div>
                                         </div>
-                                        
+
                                         <!-- twitter:description -->
                                         <div class="seo-tag-item mb-3">
                                             <div class="tag-label d-flex justify-content-between">
@@ -434,7 +350,7 @@
                                             </div>
                                             <div id="twitter-description-content" class="tag-content mt-2"></div>
                                         </div>
-                                        
+
                                         <!-- twitter:image -->
                                         <div class="seo-tag-item">
                                             <div class="tag-label d-flex justify-content-between">
@@ -449,7 +365,7 @@
                         </div>
                     </div>
                 </div>
-                
+
                 <!-- Visual Summary Tab --> 
                 <div class="tab-pane fade" id="visual-summary-pane" role="tabpanel" aria-labelledby="visual-summary-tab"> 
                     <div class="row"> 
@@ -521,8 +437,63 @@
                         </div> 
                     </div> 
                 </div>
-                <!-- Previews Tab -->
-                <div class="tab-pane fade" id="social-preview-pane" role="tabpanel" aria-labelledby="social-preview-tab">
+                <!-- Social Media Tags Section -->
+                <div class="card shadow-sm mb-4">
+                    <div class="card-header bg-transparent">
+                        <h5 class="mb-0">
+                            <i class="fas fa-tags me-2"></i>
+                            Social Media Tags
+                        </h5>
+                    </div>
+                    <div class="card-body">
+                        <!-- Open Graph Tags -->
+                        <h6 class="mb-3">
+                            <i class="fab fa-facebook me-2"></i>
+                            Open Graph Tags
+                        </h6>
+                        <div class="table-responsive mb-4">
+                            <table class="table table-sm">
+                                <thead>
+                                    <tr>
+                                        <th style="width: 30%">Tag</th>
+                                        <th>Content</th>
+                                    </tr>
+                                </thead>
+                                <tbody id="og-tags-table">
+                                    <tr>
+                                        <td>No data available</td>
+                                        <td></td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                        </div>
+
+                        <!-- Twitter Card Tags -->
+                        <h6 class="mb-3">
+                            <i class="fab fa-twitter me-2"></i>
+                            Twitter Card Tags
+                        </h6>
+                        <div class="table-responsive">
+                            <table class="table table-sm">
+                                <thead>
+                                    <tr>
+                                        <th style="width: 30%">Tag</th>
+                                        <th>Content</th>
+                                    </tr>
+                                </thead>
+                                <tbody id="twitter-tags-table">
+                                    <tr>
+                                        <td>No data available</td>
+                                        <td></td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Social Media Previews Tab -->
+                <div class="tab-pane fade" id="social-preview-pane" role="tabpanel">
                     <div class="row">
                         <!-- Google Search Preview -->
                         <div class="col-lg-8 mb-4">
@@ -546,7 +517,7 @@
                                 </div>
                             </div>
                         </div>
-                        
+
                         <!-- Score Card -->
                         <div class="col-lg-4 mb-4">
                             <div class="card shadow-sm h-100">
@@ -586,7 +557,7 @@
                                 </div>
                             </div>
                         </div>
-                        
+
                         <!-- Social Media Previews -->
                         <div class="col-md-6 mb-4">
                             <div class="card shadow-sm h-100">
@@ -616,7 +587,7 @@
                                 </div>
                             </div>
                         </div>
-                        
+
                         <div class="col-md-6 mb-4">
                             <div class="card shadow-sm h-100">
                                 <div class="card-header bg-transparent">
@@ -647,7 +618,7 @@
                         </div>
                     </div>
                 </div>
-                
+
                 <!-- Recommendations Tab -->
                 <div class="tab-pane fade" id="recommendations" role="tabpanel" aria-labelledby="recommendations-tab">
                     <div class="card shadow-sm">
@@ -669,15 +640,99 @@
                     </div>
                 </div>
             </div>
+            <!-- Detailed SEO Checks Section -->
+            <div class="card shadow-sm mb-4">
+                <div class="card-header bg-transparent">
+                    <h5 class="mb-0">
+                        <i class="fas fa-check-square me-2"></i>
+                        Detailed SEO Checks
+                    </h5>
+                </div>
+                <div class="card-body">
+                    <div id="seo-checks-container">
+                        <p class="text-muted">SEO checks will be displayed here...</p>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Tag Tables Section -->
+            <div class="card shadow-sm mb-4">
+                <div class="card-header bg-transparent">
+                    <h5 class="mb-0">
+                        <i class="fas fa-tags me-2"></i>
+                        Social Media Tags
+                    </h5>
+                </div>
+                <div class="card-body">
+                    <!-- Open Graph Tags -->
+                    <h6 class="mb-3">
+                        <i class="fab fa-facebook me-2"></i>
+                        Open Graph Tags
+                    </h6>
+                    <div class="table-responsive mb-4">
+                        <table class="table table-sm">
+                            <thead>
+                                <tr>
+                                    <th style="width: 30%">Tag</th>
+                                    <th>Content</th>
+                                </tr>
+                            </thead>
+                            <tbody id="og-tags-table">
+                                <tr>
+                                    <td>No data available</td>
+                                    <td></td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+
+                    <!-- Twitter Card Tags -->
+                    <h6 class="mb-3">
+                        <i class="fab fa-twitter me-2"></i>
+                        Twitter Card Tags
+                    </h6>
+                    <div class="table-responsive">
+                        <table class="table table-sm">
+                            <thead>
+                                <tr>
+                                    <th style="width: 30%">Tag</th>
+                                    <th>Content</th>
+                                </tr>
+                            </thead>
+                            <tbody id="twitter-tags-table">
+                                <tr>
+                                    <td>No data available</td>
+                                    <td></td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Recommendations Section -->
+            <div class="card shadow-sm mb-4">
+                <div class="card-header bg-transparent">
+                    <h5 class="mb-0">
+                        <i class="fas fa-lightbulb me-2"></i>
+                        Recommendations
+                    </h5>
+                </div>
+                <div class="card-body">
+                    <div id="recommendations-container">
+                        <p class="text-muted">Recommendations will be displayed here...</p>
+                    </div>
+                </div>
+            </div>
         </section>
-        
+
         <!-- Error Alert (Initially Hidden) -->
         <div id="error-alert" class="alert alert-danger d-none" role="alert">
             <i class="fas fa-exclamation-circle me-2"></i>
             <span id="error-message">An error occurred</span>
         </div>
     </div>
-    
+
     <!-- Footer -->
     <footer class="mt-5 py-4 bg-dark">
         <div class="container text-center text-muted">
@@ -690,10 +745,10 @@
             </p>
         </div>
     </footer>
-    
+
     <!-- Bootstrap Bundle with Popper -->
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
-    
+
     <!-- Custom JavaScript -->
     <script src="{{ url_for('static', filename='js/script.js') }}"></script>
     <script src="{{ url_for('static', filename='js/recommendations.js') }}"></script>
